@@ -2,13 +2,10 @@ import { AnyAction, Reducer } from 'redux';
 
 import { EffectsCommandMap } from 'dva';
 import { BasicGood } from './data.d';
-import { Dispatch } from './data.d';
 import { queryBasicProfile } from './service';
-import { queryDispatch } from './service';
 
 export interface StateType {
   basicGoods: BasicGood[];
-  dispatch: Dispatch[];
 }
 
 export type Effect = (
@@ -21,7 +18,6 @@ export interface ModelType {
   state: StateType;
   effects: {
     fetchBasic: Effect;
-    fetchDispatch: Effect;
   };
   reducers: {
     show: Reducer<StateType>;
@@ -33,26 +29,14 @@ const Model: ModelType = {
 
   state: {
     basicGoods: [],
-    dispatch: [],
   },
 
   effects: {
-    *fetchBasic({ payload }, { call, put }) {
-      const goods = yield call(queryBasicProfile);
-      const dispatch = yield call(queryDispatch, payload);
-      const response = { basicGoods: goods['basicGoods'], dispatch: dispatch['data'] };
-      // console.log(payload);
+    *fetchBasic(_, { call, put }) {
+      const response = yield call(queryBasicProfile);
       yield put({
         type: 'show',
         payload: response,
-      });
-    },
-    *fetchDispatch(payload, { call, put }) {
-      const response = yield call(queryDispatch, payload);
-      const data = { dipatch: response['data'] };
-      yield put({
-        type: 'show',
-        payload: data,
       });
     },
   },

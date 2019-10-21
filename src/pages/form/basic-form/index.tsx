@@ -1,14 +1,14 @@
 import {
   Button,
   Card,
-  DatePicker,
+  // DatePicker,
   Form,
-  Icon,
+  // Icon,
   Input,
-  InputNumber,
-  Radio,
+  // InputNumber,
+  // Radio,
   Select,
-  Tooltip,
+  // Tooltip,
 } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
@@ -17,12 +17,12 @@ import { Dispatch } from 'redux';
 import { FormComponentProps } from 'antd/es/form';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
-import styles from './style.less';
+// import styles from './style.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const { RangePicker } = DatePicker;
-const { TextArea } = Input;
+// const { RangePicker } = DatePicker;
+// const { TextArea } = Input;
 
 interface BasicFormProps extends FormComponentProps {
   submitting: boolean;
@@ -47,7 +47,7 @@ class BasicForm extends Component<BasicFormProps> {
   render() {
     const { submitting } = this.props;
     const {
-      form: { getFieldDecorator, getFieldValue },
+      form: { getFieldDecorator /*getFieldValue*/ },
     } = this.props;
 
     const formItemLayout = {
@@ -72,7 +72,7 @@ class BasicForm extends Component<BasicFormProps> {
       <PageHeaderWrapper content={<FormattedMessage id="form-basic-form.basic.description" />}>
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
-            <FormItem {...formItemLayout} label={"客户"}>
+            <FormItem {...formItemLayout} label={'客户'}>
               {getFieldDecorator('customer', {
                 rules: [
                   {
@@ -80,9 +80,11 @@ class BasicForm extends Component<BasicFormProps> {
                     message: formatMessage({ id: 'form-basic-form.title.required' }),
                   },
                 ],
-              })(<Input placeholder={formatMessage({ id: 'form-basic-form.title.placeholder' })} />)}
+              })(
+                <Input placeholder={formatMessage({ id: 'form-basic-form.title.placeholder' })} />,
+              )}
             </FormItem>
-            <FormItem {...formItemLayout} label={"联系人"}>
+            <FormItem {...formItemLayout} label={'联系人'}>
               {getFieldDecorator('contacter', {
                 rules: [
                   {
@@ -90,9 +92,11 @@ class BasicForm extends Component<BasicFormProps> {
                     message: formatMessage({ id: 'form-basic-form.title.required' }),
                   },
                 ],
-              })(<Input placeholder={formatMessage({ id: 'form-basic-form.title.placeholder' })} />)}
+              })(
+                <Input placeholder={formatMessage({ id: 'form-basic-form.title.placeholder' })} />,
+              )}
             </FormItem>
-            <FormItem {...formItemLayout} label={"手机"}>
+            <FormItem {...formItemLayout} label={'手机'}>
               {getFieldDecorator('phone', {
                 rules: [
                   {
@@ -100,9 +104,11 @@ class BasicForm extends Component<BasicFormProps> {
                     message: formatMessage({ id: 'form-basic-form.title.required' }),
                   },
                 ],
-              })(<Input placeholder={formatMessage({ id: 'form-basic-form.title.placeholder' })} />)}
+              })(
+                <Input placeholder={formatMessage({ id: 'form-basic-form.title.placeholder' })} />,
+              )}
             </FormItem>
-            <FormItem {...formItemLayout} label={"地址"}>
+            <FormItem {...formItemLayout} label={'地址'}>
               {getFieldDecorator('address', {
                 rules: [
                   {
@@ -110,9 +116,11 @@ class BasicForm extends Component<BasicFormProps> {
                     message: formatMessage({ id: 'form-basic-form.title.required' }),
                   },
                 ],
-              })(<Input placeholder={formatMessage({ id: 'form-basic-form.title.placeholder' })} />)}
+              })(
+                <Input placeholder={formatMessage({ id: 'form-basic-form.title.placeholder' })} />,
+              )}
             </FormItem>
-            <FormItem {...formItemLayout} label={"预付款"}>
+            <FormItem {...formItemLayout} label={'预付款'}>
               {getFieldDecorator('prepayments', {
                 rules: [
                   {
@@ -120,11 +128,13 @@ class BasicForm extends Component<BasicFormProps> {
                     message: formatMessage({ id: 'form-basic-form.title.required' }),
                   },
                 ],
-              })(<Input placeholder={formatMessage({ id: 'form-basic-form.title.placeholder' })} />)}
+              })(
+                <Input placeholder={formatMessage({ id: 'form-basic-form.title.placeholder' })} />,
+              )}
             </FormItem>
             <Form.Item {...formItemLayout} label="安装类型">
               {getFieldDecorator('type', {
-                initialValue: "新装",
+                initialValue: '新装',
                 rules: [{ required: true, message: '请选择安装类型' }],
               })(
                 <Select placeholder="新装">

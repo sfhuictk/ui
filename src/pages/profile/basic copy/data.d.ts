@@ -6,14 +6,6 @@ export interface BasicGood {
   num?: string | number;
   amount?: string | number;
 }
-export interface Dispatch {
-  id: string | number;
-  customer: string | number;
-  contacter: string | number;
-  phone: number;
-  address: string;
-  type: string;
-}
 
 export interface BasicProgress {
   key: string;
@@ -26,6 +18,5 @@ export interface BasicProgress {
 
 export interface BasicProfileDataType {
   basicGoods: BasicGood[];
-  dispatch: Dispatch;
   basicProgress: BasicProgress[];
 }
