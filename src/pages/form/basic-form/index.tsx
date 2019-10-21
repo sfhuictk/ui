@@ -47,7 +47,7 @@ class BasicForm extends Component<BasicFormProps> {
   render() {
     const { submitting } = this.props;
     const {
-      form: { getFieldDecorator /*getFieldValue*/ },
+      form: { getFieldDecorator },
     } = this.props;
 
     const formItemLayout = {
