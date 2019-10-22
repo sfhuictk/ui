@@ -8,6 +8,8 @@ export interface BasicListItemDataType {
   id: string;
   construction_team: string;
   customer: string;
+  contacter: string;
+  phone: string;
   avatar: string;
   cover: string;
   status: 'normal' | 'exception' | 'active' | 'success';

@@ -1,11 +1,11 @@
 import {
   Avatar,
-  Badge,
   Button,
   Card,
   Col,
   DatePicker,
   Dropdown,
+  Drawer,
   Form,
   Icon,
   Input,
@@ -30,6 +30,8 @@ import { StateType } from './model';
 import { BasicListItemDataType } from './data.d';
 import styles from './style.less';
 
+// import Basic from './basic';
+
 const FormItem = Form.Item;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -43,6 +45,8 @@ interface BasicListProps extends FormComponentProps {
 }
 interface BasicListState {
   visible: boolean;
+  drawervisible: boolean;
+  dispatchid: string;
   done: boolean;
   current?: Partial<BasicListItemDataType>;
 }
@@ -61,10 +65,10 @@ interface BasicListState {
   }),
 )
 class BasicList extends Component<
-  BasicListProps,
-  BasicListState
+BasicListProps,
+BasicListState
 > {
-  state: BasicListState = { visible: false, done: false, current: undefined };
+  state: BasicListState = { visible: false, done: false, current: undefined, drawervisible: false, dispatchid: '1' };
 
   formLayout = {
     labelCol: { span: 7 },
@@ -89,6 +93,19 @@ class BasicList extends Component<
       current: undefined,
     });
   };
+
+  showDrawer = (did: string) => {
+    this.setState({
+      drawervisible: true,
+      dispatchid: did,
+    })
+  }
+
+  onClose = () => {
+    this.setState({
+      drawervisible: false,
+    })
+  }
 
   showEditModal = (item: BasicListItemDataType) => {
     this.setState({
@@ -194,28 +211,36 @@ class BasicList extends Component<
       showSizeChanger: true,
       showQuickJumper: true,
       pageSize: 5,
-      total: 50,
+      total: 5000,
     };
 
     const ListContent = ({
-      data: { construction_team, start_date, percent, status },
+      data: { construction_team, start_date, percent, status, contacter, phone },
     }: {
       data: BasicListItemDataType;
     }) => (
-      <div className={styles.listContent}>
-        <div className={styles.listContentItem}>
-          <span>施工队</span>
-          <p>{construction_team}</p>
+        <div className={styles.listContent}>
+          <div className={styles.listContentItem}>
+            <span>联系人</span>
+            <p>{contacter ? contacter : '无'}</p>
+          </div>
+          <div className={styles.listContentItem}>
+            <span>联系电话</span>
+            <p>{phone ? phone : '无'}</p>
+          </div>
+          <div className={styles.listContentItem}>
+            <span>施工队</span>
+            <p>{construction_team}</p>
+          </div>
+          <div className={styles.listContentItem}>
+            <span>开单日期</span>
+            <p>{moment(start_date).format('YYYY-MM-DD')}</p>
+          </div>
+          <div className={styles.listContentItem}>
+            <Progress percent={percent} status={status} strokeWidth={6} style={{ width: 180 }} />
+          </div>
         </div>
-        <div className={styles.listContentItem}>
-          <span>开单日期</span>
-          <p>{moment(start_date).format('YYYY-MM-DD')}</p>
-        </div>
-        <div className={styles.listContentItem}>
-          <Progress percent={percent} status={status} strokeWidth={6} style={{ width: 180 }} />
-        </div>
-      </div>
-    );
+      );
 
     const MoreBtn: React.FC<{
       item: BasicListItemDataType;
@@ -291,6 +316,14 @@ class BasicList extends Component<
         </Form>
       );
     };
+
+    const getDrawerContent = () => {
+      return (
+        <div>还没弄好</div>
+        // <Basic dispatchid={ this.state.dispatchid } />
+      );
+    };
+
     return (
       <>
         <PageHeaderWrapper>
@@ -352,8 +385,8 @@ class BasicList extends Component<
                   >
                     <List.Item.Meta
                       // avatar={<Avatar src={item.logo} shape="square" size="large" alt={item.id} />}
-                      avatar={ <Avatar style={{backgroundColor:'#00a2ae', verticalAlign: 'middle'}} shape="square" size="large" alt={item.id}>{ item.id }</Avatar>} 
-                      title={<a href={item.href}>{item.customer}</a>}
+                      avatar={<Avatar style={{ backgroundColor: '#00a2ae', verticalAlign: 'middle' }} shape="square" size="large" alt={item.id}>{item.id}</Avatar>}
+                      title={<a onClick={this.showDrawer.bind(this, item.id)} href={item.href}>{item.customer}</a>}
                       description={item.address}
                     />
                     <ListContent data={item} />
@@ -375,6 +408,14 @@ class BasicList extends Component<
         >
           {getModalContent()}
         </Modal>
+
+        <Drawer width={1000}
+          placement="right"
+          closable={false}
+          onClose={this.onClose}
+          visible={this.state.drawervisible}>
+          {getDrawerContent()}
+        </Drawer>
       </>
     );
   }
