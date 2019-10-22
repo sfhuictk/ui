@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Badge,
   Button,
   Card,
   Col,
@@ -197,18 +198,18 @@ class BasicList extends Component<
     };
 
     const ListContent = ({
-      data: { owner, createdAt, percent, status },
+      data: { construction_team, start_date, percent, status },
     }: {
       data: BasicListItemDataType;
     }) => (
       <div className={styles.listContent}>
         <div className={styles.listContentItem}>
-          <span>Owner</span>
-          <p>{owner}</p>
+          <span>施工队</span>
+          <p>{construction_team}</p>
         </div>
         <div className={styles.listContentItem}>
-          <span>开始时间</span>
-          <p>{moment(createdAt).format('YYYY-MM-DD HH:mm')}</p>
+          <span>开单日期</span>
+          <p>{moment(start_date).format('YYYY-MM-DD')}</p>
         </div>
         <div className={styles.listContentItem}>
           <Progress percent={percent} status={status} strokeWidth={6} style={{ width: 180 }} />
@@ -254,13 +255,13 @@ class BasicList extends Component<
           <FormItem label="任务名称" {...this.formLayout}>
             {getFieldDecorator('title', {
               rules: [{ required: true, message: '请输入任务名称' }],
-              initialValue: current.title,
+              initialValue: current.customer,
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="开始时间" {...this.formLayout}>
-            {getFieldDecorator('createdAt', {
+            {getFieldDecorator('start_date', {
               rules: [{ required: true, message: '请选择开始时间' }],
-              initialValue: current.createdAt ? moment(current.createdAt) : null,
+              initialValue: current.start_date ? moment(current.start_date) : null,
             })(
               <DatePicker
                 showTime
@@ -271,9 +272,9 @@ class BasicList extends Component<
             )}
           </FormItem>
           <FormItem label="任务负责人" {...this.formLayout}>
-            {getFieldDecorator('owner', {
+            {getFieldDecorator('construction_team', {
               rules: [{ required: true, message: '请选择任务负责人' }],
-              initialValue: current.owner,
+              initialValue: current.construction_team,
             })(
               <Select placeholder="请选择">
                 <SelectOption value="付晓晓">付晓晓</SelectOption>
@@ -350,9 +351,10 @@ class BasicList extends Component<
                     ]}
                   >
                     <List.Item.Meta
-                      avatar={<Avatar src={item.logo} shape="square" size="large" />}
-                      title={<a href={item.href}>{item.title}</a>}
-                      description={item.subDescription}
+                      // avatar={<Avatar src={item.logo} shape="square" size="large" alt={item.id} />}
+                      avatar={ <Avatar style={{backgroundColor:'#00a2ae', verticalAlign: 'middle'}} shape="square" size="large" alt={item.id}>{ item.id }</Avatar>} 
+                      title={<a href={item.href}>{item.customer}</a>}
+                      description={item.address}
                     />
                     <ListContent data={item} />
                   </List.Item>

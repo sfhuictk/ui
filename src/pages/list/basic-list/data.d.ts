@@ -6,8 +6,8 @@ export interface Member {
 
 export interface BasicListItemDataType {
   id: string;
-  owner: string;
-  title: string;
+  construction_team: string;
+  customer: string;
   avatar: string;
   cover: string;
   status: 'normal' | 'exception' | 'active' | 'success';
@@ -16,9 +16,9 @@ export interface BasicListItemDataType {
   href: string;
   body?: any;
   updatedAt: number;
-  createdAt: number;
+  start_date: number;
   subDescription: string;
-  description: string;
+  address: string;
   activeUser: number;
   newUser: number;
   star: number;
