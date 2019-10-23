@@ -5,12 +5,13 @@ import { Dispatch } from 'redux';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import { BasicProfileDataType } from './data.d';
+import { StateType } from '../model';
 
 interface BasicProps {
   loading: boolean;
   dispatch: Dispatch<any>;
   profileBasic: BasicProfileDataType;
-  dispatchid?: string;
+  dispatchid?: StateType['id'];
 }
 
 interface BasicState {
@@ -41,15 +42,15 @@ class Basic extends Component<BasicProps, BasicState> {
     });
   }
 
-  componentWillReceiveProps(nextProps: any, prevState: { dispatch: Dispatch<any>; dispatchid: any; }) {
-    if (nextProps.dispatchid !== prevState.dispatchid) {
-      const { dispatch, dispatchid } = nextProps;
-      dispatch({
-        type: 'profileBasic/fetchBasic',
-        payload: dispatchid,
-      });
-    }
-  }
+  // componentWillReceiveProps(nextProps: any, prevState: { dispatch: Dispatch<any>; dispatchid: any; }) {
+  //   if (nextProps.dispatchid !== prevState.dispatchid) {
+  //     const { dispatch, dispatchid } = nextProps;
+  //     dispatch({
+  //       type: 'profileBasic/fetchBasic',
+  //       payload: dispatchid,
+  //     });
+  //   }
+  // }
 
   render() {
     const { profileBasic } = this.props;

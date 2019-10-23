@@ -6,6 +6,7 @@ import { BasicListItemDataType } from './data.d';
 
 export interface StateType {
   list: BasicListItemDataType[];
+  id?: string;
 }
 
 export type Effect = (
@@ -22,6 +23,7 @@ export interface ModelType {
     submit: Effect;
   };
   reducers: {
+    changelistid : Reducer<StateType>;
     queryList: Reducer<StateType>;
     appendList: Reducer<StateType>;
   };
@@ -65,6 +67,13 @@ const Model: ModelType = {
   },
 
   reducers: {
+    changelistid (state,action){
+      return {
+        ...state,
+        id: action.payload,
+        list: action.payload,
+      };
+    },
     queryList(state, action) {
       return {
         ...state,

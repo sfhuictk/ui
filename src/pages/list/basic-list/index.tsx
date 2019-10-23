@@ -30,7 +30,7 @@ import { StateType } from './model';
 import { BasicListItemDataType } from './data.d';
 import styles from './style.less';
 
-// import Basic from './basic';
+import Basic from './basic';
 
 const FormItem = Form.Item;
 const RadioButton = Radio.Button;
@@ -44,9 +44,9 @@ interface BasicListProps extends FormComponentProps {
   loading: boolean;
 }
 interface BasicListState {
+  id: StateType['id'];
   visible: boolean;
   drawervisible: boolean;
-  dispatchid: string;
   done: boolean;
   current?: Partial<BasicListItemDataType>;
 }
@@ -68,7 +68,7 @@ class BasicList extends Component<
 BasicListProps,
 BasicListState
 > {
-  state: BasicListState = { visible: false, done: false, current: undefined, drawervisible: false, dispatchid: '1' };
+  state: BasicListState = { visible: false, done: false, current: undefined, drawervisible: false, id: '2' };
 
   formLayout = {
     labelCol: { span: 7 },
@@ -96,8 +96,10 @@ BasicListState
 
   showDrawer = (did: string) => {
     this.setState({
+      id: did,
+    });
+    this.setState({
       drawervisible: true,
-      dispatchid: did,
     })
   }
 
@@ -319,8 +321,8 @@ BasicListState
 
     const getDrawerContent = () => {
       return (
-        <div>还没弄好</div>
-        // <Basic dispatchid={ this.state.dispatchid } />
+        // <div>还没弄好</div>
+        <Basic dispatchid={this.state.id} />
       );
     };
 
@@ -409,7 +411,9 @@ BasicListState
           {getModalContent()}
         </Modal>
 
-        <Drawer width={1000}
+        <Drawer
+          destroyOnClose={true}
+          width={1000}
           placement="right"
           closable={false}
           onClose={this.onClose}
