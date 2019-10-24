@@ -5,6 +5,8 @@ import {
   Col,
   DatePicker,
   Dropdown,
+  Descriptions,
+  Divider,
   Drawer,
   Form,
   Icon,
@@ -29,8 +31,6 @@ import moment from 'moment';
 import { StateType } from './model';
 import { BasicListItemDataType } from './data.d';
 import styles from './style.less';
-
-import Basic from './basic';
 
 const FormItem = Form.Item;
 const RadioButton = Radio.Button;
@@ -322,7 +322,23 @@ BasicListState
     const getDrawerContent = () => {
       return (
         // <div>还没弄好</div>
-        <Basic dispatchid={this.state.id} />
+        <Card bordered={false}>
+          <Descriptions title="客户信息" style={{ marginBottom: 32 }}>
+            <Descriptions.Item label="客户名称">{current.customer}</Descriptions.Item>
+            <Descriptions.Item label="联系人">{current.contacter}</Descriptions.Item>
+            <Descriptions.Item label="联系电话">{current.phone}</Descriptions.Item>
+            <Descriptions.Item label="安装地址">{current.address}</Descriptions.Item>
+            <Descriptions.Item label="安装类型">{current.type}</Descriptions.Item>
+          </Descriptions>
+          <Divider style={{ marginBottom: 32 }} />
+          <Descriptions title="退款申请" style={{ marginBottom: 32 }}>
+            <Descriptions.Item label="取货单号">1000000000</Descriptions.Item>
+            <Descriptions.Item label="状态">已取货</Descriptions.Item>
+            <Descriptions.Item label="销售单号">1234123421</Descriptions.Item>
+            <Descriptions.Item label="子订单">3214321432</Descriptions.Item>
+          </Descriptions>
+          <Divider style={{ marginBottom: 32 }} />
+        </Card>
       );
     };
 

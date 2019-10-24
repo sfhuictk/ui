@@ -20,6 +20,7 @@ export interface BasicListItemDataType {
   updatedAt: number;
   start_date: number;
   subDescription: string;
+  type: string;
   address: string;
   activeUser: number;
   newUser: number;
