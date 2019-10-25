@@ -131,7 +131,7 @@ BasicListState
   //联系人表单联动
   handleCustomerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { current } = this.state;
-    const content = !current && e.target.value.length <=3 ? e.target.value : '';
+    const content = !current && e.target.value && e.target.value.length <=3 ? e.target.value : '';
     this.props.form.setFieldsValue({
       contacter: content,
     });
