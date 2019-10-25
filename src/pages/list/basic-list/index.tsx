@@ -309,7 +309,7 @@ BasicListState
           <FormItem label="安装类型" {...this.formLayout}>
             {getFieldDecorator('type', {
               rules: [{ required: true, message: '请选择安装类型' }],
-              initialValue: current.construction_team,
+              initialValue: current.type,
             })(
               <Select placeholder="请选择">
                 <SelectOption value="新装">新装</SelectOption>
