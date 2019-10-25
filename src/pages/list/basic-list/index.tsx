@@ -94,12 +94,10 @@ BasicListState
     });
   };
 
-  showDrawer = (did: string) => {
-    this.setState({
-      id: did,
-    });
+  showDrawer = (item: BasicListItemDataType) => {
     this.setState({
       drawervisible: true,
+      current: item,
     })
   }
 
@@ -404,7 +402,7 @@ BasicListState
                     <List.Item.Meta
                       // avatar={<Avatar src={item.logo} shape="square" size="large" alt={item.id} />}
                       avatar={<Avatar style={{ backgroundColor: '#00a2ae', verticalAlign: 'middle' }} shape="square" size="large" alt={item.id}>{item.id}</Avatar>}
-                      title={<a onClick={this.showDrawer.bind(this, item.id)} href={item.href}>{item.customer}</a>}
+                      title={<a onClick={this.showDrawer.bind(this, item)} href={item.href}>{item.customer}</a>}
                       description={item.address}
                     />
                     <ListContent data={item} />
