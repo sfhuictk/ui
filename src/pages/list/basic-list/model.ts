@@ -61,7 +61,7 @@ const Model: ModelType = {
       const response = yield call(callback, payload); // post
       yield put({
         type: 'queryList',
-        payload: response,
+        payload: response['data'],
       });
     },
   },

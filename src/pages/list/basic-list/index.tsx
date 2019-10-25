@@ -3,7 +3,6 @@ import {
   Button,
   Card,
   Col,
-  DatePicker,
   Dropdown,
   Descriptions,
   Divider,
@@ -277,40 +276,53 @@ BasicListState
       }
       return (
         <Form onSubmit={this.handleSubmit}>
-          <FormItem label="任务名称" {...this.formLayout}>
-            {getFieldDecorator('title', {
-              rules: [{ required: true, message: '请输入任务名称' }],
+          <FormItem label="客户名称" {...this.formLayout}>
+            {getFieldDecorator('customer', {
+              rules: [{ required: true, message: '请输入客户名称' }],
               initialValue: current.customer,
             })(<Input placeholder="请输入" />)}
           </FormItem>
-          <FormItem label="开始时间" {...this.formLayout}>
-            {getFieldDecorator('start_date', {
-              rules: [{ required: true, message: '请选择开始时间' }],
-              initialValue: current.start_date ? moment(current.start_date) : null,
-            })(
-              <DatePicker
-                showTime
-                placeholder="请选择"
-                format="YYYY-MM-DD HH:mm:ss"
-                style={{ width: '100%' }}
-              />,
-            )}
+          <FormItem label="联系人" {...this.formLayout}>
+            {getFieldDecorator('contacter', {
+              rules: [{ required: false, message: '请输入联系人' }],
+              initialValue: current.contacter,
+            })(<Input placeholder="请输入" />)}
           </FormItem>
-          <FormItem label="任务负责人" {...this.formLayout}>
-            {getFieldDecorator('construction_team', {
-              rules: [{ required: true, message: '请选择任务负责人' }],
+          <FormItem label="手机" {...this.formLayout}>
+            {getFieldDecorator('phone', {
+              rules: [{ required: true, message: '请输入手机号码' }],
+              initialValue: current.phone,
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem label="安装地址" {...this.formLayout}>
+            {getFieldDecorator('address', {
+              rules: [{ required: true, message: '请输入安装地址' }],
+              initialValue: current.address,
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem label="预付款" {...this.formLayout}>
+            {getFieldDecorator('prepayments', {
+              rules: [{ required: false, message: '请输入预付款' }],
+              initialValue: current.prepayments,
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem label="安装类型" {...this.formLayout}>
+            {getFieldDecorator('type', {
+              rules: [{ required: true, message: '请选择安装类型' }],
               initialValue: current.construction_team,
             })(
               <Select placeholder="请选择">
-                <SelectOption value="付晓晓">付晓晓</SelectOption>
-                <SelectOption value="周毛毛">周毛毛</SelectOption>
+                <SelectOption value="新装">新装</SelectOption>
+                <SelectOption value="迁移">迁移</SelectOption>
+                <SelectOption value="改管">改管</SelectOption>
+                <SelectOption value="抄表到户">抄表到户</SelectOption>
               </Select>,
             )}
           </FormItem>
-          <FormItem {...this.formLayout} label="产品描述">
-            {getFieldDecorator('subDescription', {
-              rules: [{ message: '请输入至少五个字符的产品描述！', min: 5 }],
-              initialValue: current.subDescription,
+          <FormItem {...this.formLayout} label="备注">
+            {getFieldDecorator('remark', {
+              rules: [{ message: '请输入至少五个字符的备注内容！', min: 5 }],
+              initialValue: current.remark,
             })(<TextArea rows={4} placeholder="请输入至少五个字符" />)}
           </FormItem>
         </Form>
@@ -414,7 +426,7 @@ BasicListState
         </PageHeaderWrapper>
 
         <Modal
-          title={done ? null : `任务${current ? '编辑' : '添加'}`}
+          title={done ? null : `${current.id ? '编辑' : '添加'}工单`}
           className={styles.standardListForm}
           width={640}
           bodyStyle={done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
@@ -427,7 +439,7 @@ BasicListState
 
         <Drawer
           destroyOnClose={true}
-          width={1000}
+          width={'50%'}
           placement="right"
           closable={false}
           onClose={this.onClose}

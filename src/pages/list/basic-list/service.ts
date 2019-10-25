@@ -31,14 +31,10 @@ export async function removeFakeList(params: ParamsType) {
 
 export async function addFakeList(params: ParamsType) {
   const { count = 5, ...restParams } = params;
-  return request('/api/fake_list', {
+  return request('/server/api/dispatchcreate', {
     method: 'POST',
-    params: {
-      count,
-    },
     data: {
       ...restParams,
-      method: 'post',
     },
   });
 }

@@ -10,6 +10,8 @@ export interface BasicListItemDataType {
   customer: string;
   contacter: string;
   phone: string;
+  prepayments: number;
+  remark: string;
   avatar: string;
   cover: string;
   status: 'normal' | 'exception' | 'active' | 'success';
