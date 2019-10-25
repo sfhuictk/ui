@@ -128,6 +128,15 @@ BasicListState
     });
   };
 
+  //联系人表单联动
+  handleCustomerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { current } = this.state;
+    const content = !current && e.target.value.length <=3 ? e.target.value : '';
+    this.props.form.setFieldsValue({
+      contacter: content,
+    });
+  };
+
   handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const { dispatch, form } = this.props;
@@ -280,10 +289,10 @@ BasicListState
             {getFieldDecorator('customer', {
               rules: [{ required: true, message: '请输入客户名称' }],
               initialValue: current.customer,
-            })(<Input placeholder="请输入" />)}
+            })(<Input onChange={this.handleCustomerChange} placeholder="请输入" />)}
           </FormItem>
           <FormItem label="联系人" {...this.formLayout}>
-            {getFieldDecorator('contacter', {
+            {getFieldDecorator('contacter', {              
               rules: [{ required: false, message: '请输入联系人' }],
               initialValue: current.contacter,
             })(<Input placeholder="请输入" />)}
