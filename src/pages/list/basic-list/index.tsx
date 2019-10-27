@@ -234,7 +234,7 @@ BasicListState
     };
 
     const ListContent = ({
-      data: { construction_team, start_date, percent, status, contacter, phone },
+      data: { construction_team, created_at, percent, status, contacter, phone },
     }: {
       data: BasicListItemDataType;
     }) => (
@@ -248,12 +248,12 @@ BasicListState
             <p>{phone ? phone : '无'}</p>
           </div>
           <div className={styles.listContentItem}>
-            <span>施工队</span>
-            <p>{construction_team}</p>
+            <span>施工队伍</span>
+            <p>{construction_team?construction_team:'未派工'}</p>
           </div>
           <div className={styles.listContentItem}>
             <span>开单日期</span>
-            <p>{moment(start_date).format('YYYY-MM-DD')}</p>
+            <p>{moment(created_at).format('YYYY-MM-DD')}</p>
           </div>
           <div className={styles.listContentItem}>
             <Progress percent={percent} status={status} strokeWidth={6} style={{ width: 180 }} />

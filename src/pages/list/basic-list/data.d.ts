@@ -10,6 +10,7 @@ export interface BasicListItemDataType {
   customer: string;
   contacter: string;
   completed_date: number;
+  created_at: number;
   phone: string;
   prepayments: number;
   remark: string;

@@ -45,10 +45,10 @@ const Model: ModelType = {
       });
     },
     *appendFetch({ payload }, { call, put }) {
-      const response = yield call(queryFakeList, payload);
+      const response = yield call(queryserverFakeList, payload);
       yield put({
         type: 'appendList',
-        payload: Array.isArray(response) ? response : [],
+        payload: Array.isArray(response['data']) ? response['data'] : [],
       });
     },
     *submit({ payload }, { call, put }) {
@@ -60,7 +60,7 @@ const Model: ModelType = {
       }
       const response = yield call(callback, payload); // post
       yield put({
-        type: 'queryList',
+        type: 'fetch',
         payload: response['data'],
       });
     },
