@@ -9,6 +9,7 @@ export interface BasicListItemDataType {
   construction_team: string;
   customer: string;
   contacter: string;
+  completed_date: number;
   phone: string;
   prepayments: number;
   remark: string;

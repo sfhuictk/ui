@@ -128,8 +128,8 @@ BasicListState
   };
 
   handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const status = e.target.value == 'process'? 4 : e.target.value == 'done'? 99 : '';
-    const { dispatch,listBasicList } = this.props;
+    const status = e.target.value == 'process' ? 4 : e.target.value == 'done' ? 99 : '';
+    const { dispatch, listBasicList } = this.props;
     dispatch({
       type: 'listBasicList/filter',
       payload: {
@@ -143,7 +143,7 @@ BasicListState
   //联系人表单联动
   handleCustomerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { current } = this.state;
-    const content = !current && e.target.value && e.target.value.length <=3 ? e.target.value : '';
+    const content = !current && e.target.value && e.target.value.length <= 3 ? e.target.value : '';
     this.props.form.setFieldsValue({
       contacter: content,
     });
@@ -178,11 +178,11 @@ BasicListState
 
   render() {
     const {
-      listBasicList: {  list },
+      listBasicList: { list },
       loading,
     } = this.props;
     const {
-      form: { getFieldDecorator },
+      form: { getFieldDecorator,getFieldValue },
     } = this.props;
 
     const { visible, done, current = {} } = this.state;
@@ -304,14 +304,14 @@ BasicListState
             })(<Input onChange={this.handleCustomerChange} placeholder="请输入" />)}
           </FormItem>
           <FormItem label="联系人" {...this.formLayout}>
-            {getFieldDecorator('contacter', {              
+            {getFieldDecorator('contacter', {
               rules: [{ required: false, message: '请输入联系人' }],
               initialValue: current.contacter,
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="手机" {...this.formLayout}>
             {getFieldDecorator('phone', {
-              rules: [{ required: true, message: '请输入手机号码' }],
+              rules: [{ required: true,pattern: new RegExp(/^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$/, "g"), message: '请输入手机号码' }],
               initialValue: current.phone,
             })(<Input placeholder="请输入" />)}
           </FormItem>
@@ -325,6 +325,14 @@ BasicListState
             {getFieldDecorator('prepayments', {
               rules: [{ required: false, message: '请输入预付款' }],
               initialValue: current.prepayments,
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem label="收据编号" {...this.formLayout} style={{
+                display: getFieldValue('prepayments')? 'block' : 'none',
+              }} >
+            {getFieldDecorator('receipt', {              
+              rules: [{ required: true, message: '请输入收据编号' }],              
+              initialValue: '000000',
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="安装类型" {...this.formLayout}>
@@ -354,19 +362,19 @@ BasicListState
       return (
         // <div>还没弄好</div>
         <Card bordered={false}>
-          <Descriptions title="客户信息" style={{ marginBottom: 32 }}>
-            <Descriptions.Item label="客户名称">{current.customer}</Descriptions.Item>
+          <Descriptions column={2} title="客户信息" style={{ marginBottom: 32 }}>
+            <Descriptions.Item label="客户名称" >{current.customer}</Descriptions.Item>
             <Descriptions.Item label="联系人">{current.contacter}</Descriptions.Item>
+            <Descriptions.Item label="安装地址" >{current.address}</Descriptions.Item>
             <Descriptions.Item label="联系电话">{current.phone}</Descriptions.Item>
-            <Descriptions.Item label="安装地址">{current.address}</Descriptions.Item>
-            <Descriptions.Item label="安装类型">{current.type}</Descriptions.Item>
           </Descriptions>
           <Divider style={{ marginBottom: 32 }} />
-          <Descriptions title="退款申请" style={{ marginBottom: 32 }}>
-            <Descriptions.Item label="取货单号">1000000000</Descriptions.Item>
-            <Descriptions.Item label="状态">已取货</Descriptions.Item>
-            <Descriptions.Item label="销售单号">1234123421</Descriptions.Item>
-            <Descriptions.Item label="子订单">3214321432</Descriptions.Item>
+          <Descriptions title="工程信息" style={{ marginBottom: 32 }}>
+            <Descriptions.Item label="安装类型" >{current.type}</Descriptions.Item>
+            <Descriptions.Item label="开工时间">{current.start_date}</Descriptions.Item>
+            <Descriptions.Item label="施工队伍">{current.construction_team}</Descriptions.Item>
+            <Descriptions.Item label="完工时间">{current.completed_date}</Descriptions.Item>
+            <Descriptions.Item label="状态">{current.status}</Descriptions.Item>
           </Descriptions>
           <Divider style={{ marginBottom: 32 }} />
         </Card>
@@ -437,7 +445,7 @@ BasicListState
                       avatar={<Avatar style={{ backgroundColor: '#1890FF', verticalAlign: 'middle' }} shape="square" size="large" >{item.id}</Avatar>}
                       title={<a onClick={this.showDrawer.bind(this, item)} href={item.href}>{item.customer}</a>}
                       description={item.address}
-                    />                    
+                    />
                     <ListContent data={item} />
                   </List.Item>
                 )}
