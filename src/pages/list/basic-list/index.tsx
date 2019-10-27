@@ -43,7 +43,6 @@ interface BasicListProps extends FormComponentProps {
   loading: boolean;
 }
 interface BasicListState {
-  id: StateType['id'];
   visible: boolean;
   drawervisible: boolean;
   done: boolean;
@@ -67,7 +66,7 @@ class BasicList extends Component<
 BasicListProps,
 BasicListState
 > {
-  state: BasicListState = { visible: false, done: false, current: undefined, drawervisible: false, id: '2' };
+  state: BasicListState = { visible: false, done: false, current: undefined, drawervisible: false, };
 
   formLayout = {
     labelCol: { span: 7 },
@@ -128,6 +127,19 @@ BasicListState
     });
   };
 
+  handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const status = e.target.value == 'process'? 4 : e.target.value == 'done'? 99 : '';
+    const { dispatch,listBasicList } = this.props;
+    dispatch({
+      type: 'listBasicList/filter',
+      payload: {
+        data: listBasicList,
+        filter: status,
+        count: 5,
+      },
+    });
+  }
+
   //联系人表单联动
   handleCustomerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { current } = this.state;
@@ -166,7 +178,7 @@ BasicListState
 
   render() {
     const {
-      listBasicList: { list },
+      listBasicList: {  list },
       loading,
     } = this.props;
     const {
@@ -205,11 +217,11 @@ BasicListState
     );
 
     const extraContent = (
-      <div className={styles.extraContent}>
+      <div className={styles.extraContent} onChange={this.handleFilter}>
         <RadioGroup defaultValue="all">
           <RadioButton value="all">全部</RadioButton>
           <RadioButton value="progress">进行中</RadioButton>
-          <RadioButton value="waiting">等待中</RadioButton>
+          <RadioButton value="done">完成</RadioButton>
         </RadioGroup>
         <Search className={styles.extraContentSearch} placeholder="请输入" onSearch={() => ({})} />
       </div>
