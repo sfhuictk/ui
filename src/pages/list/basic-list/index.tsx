@@ -422,10 +422,10 @@ BasicListState
                   >
                     <List.Item.Meta
                       // avatar={<Avatar src={item.logo} shape="square" size="large" alt={item.id} />}
-                      avatar={<Avatar style={{ backgroundColor: '#00a2ae', verticalAlign: 'middle' }} shape="square" size="large" alt={item.id}>{item.id}</Avatar>}
+                      avatar={<Avatar style={{ backgroundColor: '#1890FF', verticalAlign: 'middle' }} shape="square" size="large" >{item.id}</Avatar>}
                       title={<a onClick={this.showDrawer.bind(this, item)} href={item.href}>{item.customer}</a>}
                       description={item.address}
-                    />
+                    />                    
                     <ListContent data={item} />
                   </List.Item>
                 )}
