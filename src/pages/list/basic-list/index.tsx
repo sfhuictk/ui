@@ -231,7 +231,6 @@ BasicListState
       showSizeChanger: true,
       showQuickJumper: true,
       pageSize: 5,
-      total: 5000,
     };
 
     const ListContent = ({
