@@ -327,7 +327,7 @@ BasicListState
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="收据编号" {...this.formLayout} style={{
-                display: getFieldValue('prepayments')? 'block' : 'none',
+                display: getFieldValue('prepayments')>0? 'block' : 'none',
               }} >
             {getFieldDecorator('receipt', {              
               rules: [{ required: true, message: '请输入收据编号' }],              
