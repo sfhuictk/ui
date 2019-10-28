@@ -1,6 +1,6 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { addFakeList, queryFakeList,queryserverFakeList, removeFakeList, updateFakeList } from './service';
+import { addFakeList, queryserverFakeList, removeFakeList, updateFakeList } from './service';
 
 import { BasicListItemDataType } from './data.d';
 

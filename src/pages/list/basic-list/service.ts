@@ -41,11 +41,8 @@ export async function addFakeList(params: ParamsType) {
 
 export async function updateFakeList(params: ParamsType) {
   const { count = 5, ...restParams } = params;
-  return request('/api/fake_list', {
+  return request('/server/api/dispatchupdate', {
     method: 'POST',
-    params: {
-      count,
-    },
     data: {
       ...restParams,
       method: 'update',
