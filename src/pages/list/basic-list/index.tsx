@@ -176,6 +176,16 @@ BasicListState
     });
   };
 
+  handleSearch = (e: string) => {
+    const { dispatch } = this.props;
+    const payload = {key: e};
+    console.log( payload );
+    dispatch({
+      type: 'listBasicList/search',
+      payload: payload,
+    });
+  }
+
   render() {
     const {
       listBasicList: { list },
@@ -223,7 +233,7 @@ BasicListState
           <RadioButton value="progress">进行中</RadioButton>
           <RadioButton value="done">完成</RadioButton>
         </RadioGroup>
-        <Search className={styles.extraContentSearch} placeholder="请输入" onSearch={() => ({})} />
+        <Search className={styles.extraContentSearch} placeholder="请输入" onSearch={this.handleSearch} />
       </div>
     );
 

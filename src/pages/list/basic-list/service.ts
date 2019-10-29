@@ -3,10 +3,19 @@ import { BasicListItemDataType } from './data.d';
 
 interface ParamsType extends Partial<BasicListItemDataType> {
   count?: number;
+  key?: number;
 }
 
 export async function queryserverFakeList() {
   return request('/server/api/dispatch');
+}
+
+export async function queryserverSearch(params: ParamsType) {
+  const { ...restParams } = params;
+  return request('/server/api/dispatch/search',{
+  method: 'POST',
+  data: { ...restParams },
+  });
 }
 
 export async function queryFakeList(params: ParamsType) {
