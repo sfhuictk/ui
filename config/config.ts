@@ -287,28 +287,28 @@ export default {
                 },
               ],
             },
-            {
-              name: 'editor',
-              icon: 'highlight',
-              path: '/editor',
-              routes: [
-                {
-                  name: 'flow',
-                  path: '/editor/flow',
-                  component: './editor/flow',
-                },
-                {
-                  name: 'mind',
-                  path: '/editor/mind',
-                  component: './editor/mind',
-                },
-                {
-                  name: 'koni',
-                  path: '/editor/koni',
-                  component: './editor/koni',
-                },
-              ],
-            },
+            // {
+            //   name: 'editor',
+            //   icon: 'highlight',
+            //   path: '/editor',
+            //   routes: [
+            //     {
+            //       name: 'flow',
+            //       path: '/editor/flow',
+            //       component: './editor/flow',
+            //     },
+            //     {
+            //       name: 'mind',
+            //       path: '/editor/mind',
+            //       component: './editor/mind',
+            //     },
+            //     {
+            //       name: 'koni',
+            //       path: '/editor/koni',
+            //       component: './editor/koni',
+            //     },
+            //   ],
+            // },
             {
               path: '/',
               redirect: '/dashboard/analysis',
