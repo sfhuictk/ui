@@ -6,6 +6,7 @@ import Link from 'umi/link';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import moment from 'moment';
+import Radar from './components/Radar';
 import { ModalState } from './model';
 import EditableLinkGroup from './components/EditableLinkGroup';
 import styles from './style.less';
@@ -22,6 +23,18 @@ const links = [
   },
   {
     title: '操作三',
+    href: '',
+  },
+  {
+    title: '操作四',
+    href: '',
+  },
+  {
+    title: '操作五',
+    href: '',
+  },
+  {
+    title: '操作六',
     href: '',
   },
 ];
@@ -146,6 +159,7 @@ class Workplace extends Component<WorkplaceProps> {
       projectNotice,
       projectLoading,
       activitiesLoading,
+      radarData,
     } = this.props;
 
     return (
@@ -188,17 +202,6 @@ class Workplace extends Component<WorkplaceProps> {
                 </Card.Grid>
               ))}
             </Card>
-            
-          </Col>
-          <Col xl={8} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              style={{ marginBottom: 24 }}
-              title="快速开始 / 便捷导航"
-              bordered={false}
-              bodyStyle={{ padding: 0 }}
-            >
-              <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} />
-            </Card>
             <Card
               bodyStyle={{ padding: 0 }}
               bordered={false}
@@ -213,6 +216,45 @@ class Workplace extends Component<WorkplaceProps> {
                 className={styles.activitiesList}
                 size="large"
               />
+            </Card>
+          </Col>
+          <Col xl={8} lg={24} md={24} sm={24} xs={24}>
+            <Card
+              style={{ marginBottom: 24 }}
+              title="快速开始 / 便捷导航"
+              bordered={false}
+              bodyStyle={{ padding: 0 }}
+            >
+              <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} />
+            </Card>
+            <Card
+              style={{ marginBottom: 24 }}
+              bordered={false}
+              title="XX 指数"
+              loading={radarData.length === 0}
+            >
+              <div className={styles.chart}>
+                <Radar hasLegend height={343} data={radarData} />
+              </div>
+            </Card>
+            <Card
+              bodyStyle={{ paddingTop: 12, paddingBottom: 12 }}
+              bordered={false}
+              title="团队"
+              loading={projectLoading}
+            >
+              <div className={styles.members}>
+                <Row gutter={48}>
+                  {projectNotice.map(item => (
+                    <Col span={12} key={`members-item-${item.id}`}>
+                      <Link to={item.href}>
+                        <Avatar src={item.logo} size="small" />
+                        <span className={styles.member}>{item.member}</span>
+                      </Link>
+                    </Col>
+                  ))}
+                </Row>
+              </div>
             </Card>
           </Col>
         </Row>
