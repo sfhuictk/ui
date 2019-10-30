@@ -178,8 +178,8 @@ BasicListState
 
   handleSearch = (e: string) => {
     const { dispatch } = this.props;
-    const payload = {key: e};
-    console.log( payload );
+    const payload = { key: e };
+    console.log(payload);
     dispatch({
       type: 'listBasicList/search',
       payload: payload,
@@ -192,7 +192,7 @@ BasicListState
       loading,
     } = this.props;
     const {
-      form: { getFieldDecorator,getFieldValue },
+      form: { getFieldDecorator, getFieldValue },
     } = this.props;
 
     const { visible, done, current = {} } = this.state;
@@ -238,7 +238,7 @@ BasicListState
     );
 
     const paginationProps = {
-      showSizeChanger: true,
+      showSizeChanger: false,
       showQuickJumper: true,
       pageSize: 5,
     };
@@ -259,14 +259,14 @@ BasicListState
           </div>
           <div className={styles.listContentItem}>
             <span>施工队伍</span>
-            <p>{construction_team?construction_team:'未派工'}</p>
+            <p>{construction_team ? construction_team : '未派工'}</p>
           </div>
           <div className={styles.listContentItem}>
             <span>开单日期</span>
             <p>{moment(created_at).format('YYYY-MM-DD')}</p>
           </div>
           <div className={styles.listContentItem}>
-            <Progress percent={status?status*10:0} status={status?status>10?'success':'active':'exception'} strokeWidth={6} style={{ width: 180 }} />
+            <Progress percent={status ? status * 10 : 0} status={status ? status > 10 ? 'success' : 'active' : 'exception'} strokeWidth={6} style={{ width: 180 }} />
           </div>
         </div>
       );
@@ -320,7 +320,7 @@ BasicListState
           </FormItem>
           <FormItem label="手机" {...this.formLayout}>
             {getFieldDecorator('phone', {
-              rules: [{ required: true,pattern: new RegExp(/^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$/, "g"), message: '请输入手机号码' }],
+              rules: [{ required: true, pattern: new RegExp(/^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$/, "g"), message: '请输入手机号码' }],
               initialValue: current.phone,
             })(<Input placeholder="请输入" />)}
           </FormItem>
@@ -337,10 +337,10 @@ BasicListState
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="收据编号" {...this.formLayout} style={{
-                display: getFieldValue('prepayments')>0? 'block' : 'none',
-              }} >
-            {getFieldDecorator('receipt', {              
-              rules: [{ required: true, message: '请输入收据编号' }],              
+            display: getFieldValue('prepayments') > 0 ? 'block' : 'none',
+          }} >
+            {getFieldDecorator('receipt', {
+              rules: [{ required: true, message: '请输入收据编号' }],
               initialValue: '000000',
             })(<Input placeholder="请输入" />)}
           </FormItem>
@@ -383,7 +383,12 @@ BasicListState
             <Descriptions.Item label="开工时间">{current.start_date}</Descriptions.Item>
             <Descriptions.Item label="施工队伍">{current.construction_team}</Descriptions.Item>
             <Descriptions.Item label="完工时间">{current.completed_date}</Descriptions.Item>
-            <Descriptions.Item label="状态"><Progress percent={current.status?current.status*10:0} status={current.status?current.status>10?'success':'active':'exception'} strokeWidth={6} style={{ width: 180 }} /></Descriptions.Item>
+            <Descriptions.Item label="状态">
+              <Progress
+                percent={current.status ? current.status * 10 : 0}
+                status={current.status ? current.status > 10 ? 'success' : 'active' : 'exception'}
+                strokeWidth={6} style={{ width: 180 }} />
+            </Descriptions.Item>
           </Descriptions>
           <Divider style={{ marginBottom: 32 }} />
         </Card>
