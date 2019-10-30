@@ -6,7 +6,6 @@ import { BasicListItemDataType } from './data.d';
 
 export interface StateType {
   list: BasicListItemDataType[];
-  id?: string;
 }
 
 export type Effect = (
