@@ -2,10 +2,11 @@ import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import { addFakeList, queryserverFakeList, removeFakeList, updateFakeList, queryserverSearch } from './service';
 
-import { BasicListItemDataType } from './data.d';
+import { BasicListItemDataType, Paginate } from './data.d';
 
 export interface StateType {
   list: BasicListItemDataType[];
+  meta?: Paginate[];
 }
 
 export type Effect = (
@@ -41,14 +42,14 @@ const Model: ModelType = {
       const response = yield call(queryserverFakeList, payload);
       yield put({
         type: 'queryList',
-        payload: Array.isArray(response['data']) ? response['data'] : [],
+        payload: response ? response : [],
       });
     },
     *search( {payload} , { call, put }) {
       const response = yield call(queryserverSearch, payload);
       yield put({
         type: 'queryList',
-        payload: Array.isArray(response['data']) ? response['data'] : [],
+        payload: response ? response : [],
       });
     },
     *appendFetch({ payload }, { call, put }) {
@@ -84,7 +85,8 @@ const Model: ModelType = {
     queryList(state, action) {
       return {
         ...state,
-        list: action.payload,
+        list: action.payload['data'],
+        meta: action.payload['meta'],
       };
     },
     appendList(state = { list: [] }, action) {

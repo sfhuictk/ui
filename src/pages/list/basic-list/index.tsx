@@ -47,6 +47,7 @@ interface BasicListState {
   drawervisible: boolean;
   done: boolean;
   current?: Partial<BasicListItemDataType>;
+  searchkey?: string;
 }
 @connect(
   ({
@@ -66,7 +67,7 @@ class BasicList extends Component<
 BasicListProps,
 BasicListState
 > {
-  state: BasicListState = { visible: false, done: false, current: undefined, drawervisible: false, };
+  state: BasicListState = { visible: false, done: false, current: undefined, drawervisible: false, searchkey: '' };
 
   formLayout = {
     labelCol: { span: 7 },
@@ -79,9 +80,6 @@ BasicListState
     const { dispatch } = this.props;
     dispatch({
       type: 'listBasicList/fetch',
-      payload: {
-        count: 5,
-      },
     });
   }
 
@@ -178,17 +176,36 @@ BasicListState
 
   handleSearch = (e: string) => {
     const { dispatch } = this.props;
-    const payload = { key: e };
-    console.log(payload);
+    const { searchkey } = this.state;
+    if (e !== searchkey) {
+      const payload = { searchkey: e };
+      this.setState({
+        searchkey: e,
+      });
+      console.log(payload);
+      dispatch({
+        type: 'listBasicList/fetch',
+        payload: payload,
+      });
+    }
+  }
+
+  handlePaginate = (e: any) => {
+    console.log({ e });
+    const { dispatch } = this.props;
+    const { searchkey } = this.state;
     dispatch({
-      type: 'listBasicList/search',
-      payload: payload,
+      type: 'listBasicList/fetch',
+      payload: {
+        page: e,
+        searchkey: searchkey,
+      },
     });
   }
 
   render() {
     const {
-      listBasicList: { list },
+      listBasicList: { list, meta },
       loading,
     } = this.props;
     const {
@@ -238,9 +255,13 @@ BasicListState
     );
 
     const paginationProps = {
+      current: meta ? meta['current_page'] : 1,
+      hideOnSinglePage: true,
       showSizeChanger: false,
       showQuickJumper: true,
       pageSize: 5,
+      total: meta ? meta['total'] : undefined,
+      onChange: this.handlePaginate
     };
 
     const ListContent = ({

@@ -2,12 +2,14 @@ import request from '@/utils/request';
 import { BasicListItemDataType } from './data.d';
 
 interface ParamsType extends Partial<BasicListItemDataType> {
-  count?: number;
+  page?: number;
   key?: number;
 }
 
-export async function queryserverFakeList() {
-  return request('/server/api/dispatch');
+export async function queryserverFakeList(params: ParamsType) {
+  return request('/server/api/dispatch',{
+    params,
+  });
 }
 
 export async function queryserverSearch(params: ParamsType) {
@@ -25,11 +27,11 @@ export async function queryFakeList(params: ParamsType) {
 }
 
 export async function removeFakeList(params: ParamsType) {
-  const { count = 5, ...restParams } = params;
+  const { page = 5, ...restParams } = params;
   return request('/api/fake_list', {
     method: 'POST',
     params: {
-      count,
+      page,
     },
     data: {
       ...restParams,
@@ -39,7 +41,7 @@ export async function removeFakeList(params: ParamsType) {
 }
 
 export async function addFakeList(params: ParamsType) {
-  const { count = 5, ...restParams } = params;
+  const { page = 5, ...restParams } = params;
   return request('/server/api/dispatchcreate', {
     method: 'POST',
     data: {
@@ -49,7 +51,7 @@ export async function addFakeList(params: ParamsType) {
 }
 
 export async function updateFakeList(params: ParamsType) {
-  const { count = 5, ...restParams } = params;
+  const { page = 5, ...restParams } = params;
   return request('/server/api/dispatchupdate', {
     method: 'POST',
     data: {

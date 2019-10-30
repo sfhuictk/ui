@@ -14,6 +14,7 @@ export interface BasicListItemDataType {
   created_at: number;
   phone: string;
   prepayments: number;
+  page: number;
   remark: string;
   avatar: string;
   cover: string;
@@ -35,3 +36,12 @@ export interface BasicListItemDataType {
   content: string;
   members: Member[];
 }
+
+export interface Paginate {
+  current_page: number;
+  from: number;
+  last_page: number;
+  per_page: number;
+  to: number;
+  total: number;
+} 
