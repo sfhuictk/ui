@@ -298,7 +298,7 @@ BasicListState
       <Dropdown
         overlay={
           <Menu onClick={({ key }) => editAndDelete(key, item)}>
-            <Menu.Item key="edit">编辑</Menu.Item>
+            <Menu.Item disabled={item.status <= 4} key="edit">编辑</Menu.Item>
             <Menu.Item key="delete">删除</Menu.Item>
           </Menu>
         }
@@ -463,7 +463,9 @@ BasicListState
                 renderItem={item => (
                   <List.Item
                     actions={[
-                      <a
+                      <Button
+                        type="link"
+                        disabled={item.status <= 4}
                         key="edit"
                         onClick={e => {
                           e.preventDefault();
@@ -471,7 +473,7 @@ BasicListState
                         }}
                       >
                         编辑
-                      </a>,
+                      </Button>,
                       <MoreBtn key="more" item={item} />,
                     ]}
                   >
