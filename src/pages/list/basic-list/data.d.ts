@@ -6,9 +6,10 @@ export interface Member {
 
 export interface BasicListItemDataType {
   id: string;
-  construction_team: string;
   customer: string;
+  construction_team: string;
   contacter: string;
+  address: string;
   completed_date: number;
   created_at: number;
   phone: string;
@@ -25,7 +26,6 @@ export interface BasicListItemDataType {
   start_date: number;
   subDescription: string;
   type: string;
-  address: string;
   activeUser: number;
   newUser: number;
   star: number;
