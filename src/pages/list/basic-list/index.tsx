@@ -266,7 +266,7 @@ BasicListState
             <p>{moment(created_at).format('YYYY-MM-DD')}</p>
           </div>
           <div className={styles.listContentItem}>
-            <Progress percent={percent} status={status} strokeWidth={6} style={{ width: 180 }} />
+            <Progress percent={status?status*10:0} status={status?status>10?'success':'active':'exception'} strokeWidth={6} style={{ width: 180 }} />
           </div>
         </div>
       );
@@ -383,7 +383,7 @@ BasicListState
             <Descriptions.Item label="开工时间">{current.start_date}</Descriptions.Item>
             <Descriptions.Item label="施工队伍">{current.construction_team}</Descriptions.Item>
             <Descriptions.Item label="完工时间">{current.completed_date}</Descriptions.Item>
-            <Descriptions.Item label="状态">{current.status}</Descriptions.Item>
+            <Descriptions.Item label="状态"><Progress percent={current.status?current.status*10:0} status={current.status?current.status>10?'success':'active':'exception'} strokeWidth={6} style={{ width: 180 }} /></Descriptions.Item>
           </Descriptions>
           <Divider style={{ marginBottom: 32 }} />
         </Card>

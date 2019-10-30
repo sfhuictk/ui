@@ -17,7 +17,8 @@ export interface BasicListItemDataType {
   remark: string;
   avatar: string;
   cover: string;
-  status: 'normal' | 'exception' | 'active' | 'success';
+  // status: 'normal' | 'exception' | 'active' | 'success';
+  status: number;
   percent: number;
   logo: string;
   href: string;
