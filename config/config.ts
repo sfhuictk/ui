@@ -142,6 +142,11 @@ export default {
                   path: '/dashboard/workplace',
                   component: './dashboard/workplace',
                 },
+                {
+                  name: 'basic-list',
+                  path: '/dashboard/basic-list',
+                  component: './dashboard/basic-list',
+                },
               ],
             },
             {

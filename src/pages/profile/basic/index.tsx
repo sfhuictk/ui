@@ -70,16 +70,12 @@ class Basic extends Component<BasicProps, BasicState> {
     const { dispatch } = this.props;
     dispatch({
       type: 'profileBasic/fetchBasic',
-      payload: 2,
     });
   }
 
   render() {
     const { profileBasic, loading } = this.props;
-    const { basicGoods, dispatch, basicProgress } = profileBasic;
-
-    // console.log(dispatch);
-
+    const { basicGoods, basicProgress } = profileBasic;
     let goodsData: typeof basicGoods = [];
     if (basicGoods.length) {
       let num = 0;
@@ -171,19 +167,19 @@ class Basic extends Component<BasicProps, BasicState> {
     return (
       <PageHeaderWrapper>
         <Card bordered={false}>
-          <Descriptions title="客户信息" style={{ marginBottom: 32 }}>
-            <Descriptions.Item label="客户名称">{dispatch.customer}</Descriptions.Item>
-            <Descriptions.Item label="联系人">{dispatch.contacter}</Descriptions.Item>
-            <Descriptions.Item label="联系电话">{dispatch.phone}</Descriptions.Item>
-            <Descriptions.Item label="安装地址">{dispatch.address}</Descriptions.Item>
-            <Descriptions.Item label="安装类型">{dispatch.type}</Descriptions.Item>
-          </Descriptions>
-          <Divider style={{ marginBottom: 32 }} />
           <Descriptions title="退款申请" style={{ marginBottom: 32 }}>
             <Descriptions.Item label="取货单号">1000000000</Descriptions.Item>
             <Descriptions.Item label="状态">已取货</Descriptions.Item>
             <Descriptions.Item label="销售单号">1234123421</Descriptions.Item>
             <Descriptions.Item label="子订单">3214321432</Descriptions.Item>
+          </Descriptions>
+          <Divider style={{ marginBottom: 32 }} />
+          <Descriptions title="用户信息" style={{ marginBottom: 32 }}>
+            <Descriptions.Item label="用户姓名">付小小</Descriptions.Item>
+            <Descriptions.Item label="联系电话">18100000000</Descriptions.Item>
+            <Descriptions.Item label="常用快递">菜鸟仓储</Descriptions.Item>
+            <Descriptions.Item label="取货地址">浙江省杭州市西湖区万塘路18号</Descriptions.Item>
+            <Descriptions.Item label="备注">无</Descriptions.Item>
           </Descriptions>
           <Divider style={{ marginBottom: 32 }} />
           <div className={styles.title}>退货商品</div>
