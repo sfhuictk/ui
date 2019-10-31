@@ -29,7 +29,7 @@ import { connect } from 'dva';
 import { findDOMNode } from 'react-dom';
 import moment from 'moment';
 import { StateType } from './model';
-import { BasicListItemDataType, CurrentUser } from './data.d';
+import { BasicListItemDataType, CurrentUser } from './data';
 import styles from './style.less';
 
 const FormItem = Form.Item;
@@ -90,7 +90,7 @@ const PageHeaderContent: React.FC<{ currentUser: CurrentUser }> = ({ currentUser
   }),
 )
 
-class BasicList extends Component<
+class Reception extends Component<
 BasicListProps,
 BasicListState
 > {
@@ -530,4 +530,4 @@ BasicListState
   }
 }
 
-export default Form.create<BasicListProps>()(BasicList);
+export default Form.create<BasicListProps>()(Reception);

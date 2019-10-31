@@ -150,6 +150,18 @@ export default {
               ],
             },
             {
+              path: 'mywork',
+              name: 'mywork',
+              icon: 'edit',
+              routes: [
+                {
+                  name: 'reception',
+                  path: '/mywork/reception',
+                  component: './mywork/reception',
+                },
+              ]
+            },
+            {
               path: '/form',
               icon: 'form',
               name: 'form',
