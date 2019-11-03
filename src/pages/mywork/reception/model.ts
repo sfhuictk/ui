@@ -1,10 +1,11 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { addFakeList, queryserverFakeList, removeFakeList, updateFakeList, queryserverSearch } from './service';
+import { addFakeList, queryserverFakeList, removeFakeList, queryCurrent, updateFakeList, queryserverSearch } from './service';
 
-import { BasicListItemDataType, Paginate } from './data';
+import { BasicListItemDataType, Paginate, CurrentUser } from './data';
 
 export interface StateType {
+  currentUser: Partial<CurrentUser>;
   list: BasicListItemDataType[];
   meta?: Paginate[];
 }
@@ -18,38 +19,61 @@ export interface ModelType {
   namespace: string;
   state: StateType;
   effects: {
+    init: Effect;
     fetch: Effect;
+    fetchUserCurrent: Effect;
     search: Effect;
     appendFetch: Effect;
     submit: Effect;
   };
   reducers: {
-    changelistid : Reducer<StateType>;
-    queryList: Reducer<StateType>;
-    appendList: Reducer<StateType>;
+    // changelistid: Reducer<StateType>;
+    // queryList: Reducer<StateType>;
+    // appendList: Reducer<StateType>;
+    save: Reducer<StateType>;
   };
 }
 
 const Model: ModelType = {
-  namespace: 'reception',
+  namespace: 'listBasicList',
 
   state: {
+    currentUser: {},
     list: [],
   },
 
   effects: {
+    *init(_, { put }) {
+      yield put({ type: 'fetchUserCurrent' });
+      yield put({ type: 'fetch' });
+    },
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryserverFakeList, payload);
       yield put({
-        type: 'queryList',
-        payload: response ? response : [],
+        type: 'save',
+        payload: {
+          list: response ? response['data'] : [],
+          meta: response ? response['meta'] : [],
+        }
       });
     },
-    *search( {payload} , { call, put }) {
+    *fetchUserCurrent(_, { call, put }) {
+      const response = yield call(queryCurrent);
+      yield put({
+        type: 'save',
+        payload: {
+          currentUser: response,
+        },
+      });
+    },
+    *search({ payload }, { call, put }) {
       const response = yield call(queryserverSearch, payload);
       yield put({
-        type: 'queryList',
-        payload: response ? response : [],
+        type: 'save',
+        payload: {
+          list: response ? response['data'] : [],
+          meta: response ? response['meta'] : [],
+        }
       });
     },
     *appendFetch({ payload }, { call, put }) {
@@ -75,24 +99,17 @@ const Model: ModelType = {
   },
 
   reducers: {
-    changelistid (state,action){
+    // queryList(state, action) {
+    //   return {
+    //     ...state,
+    //     list: action.payload['data'],
+    //     meta: action.payload['meta'],
+    //   };
+    // },
+    save(state, { payload }) {
       return {
         ...state,
-        id: action.payload,
-        list: action.payload,
-      };
-    },
-    queryList(state, action) {
-      return {
-        ...state,
-        list: action.payload['data'],
-        meta: action.payload['meta'],
-      };
-    },
-    appendList(state = { list: [] }, action) {
-      return {
-        ...state,
-        list: state.list.concat(action.payload),
+        ...payload,
       };
     },
   },

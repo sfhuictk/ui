@@ -60,3 +60,7 @@ export async function updateFakeList(params: ParamsType) {
     },
   });
 }
+
+export async function queryCurrent() {
+  return request('/api/currentUser');
+}

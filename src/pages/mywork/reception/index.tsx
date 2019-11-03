@@ -41,7 +41,7 @@ const { Search, TextArea } = Input;
 interface BasicListProps extends FormComponentProps {
   listBasicList: StateType;
   dispatch: Dispatch<any>;
-  loading: boolean;  
+  loading: boolean;
   currentUser: CurrentUser;
 }
 interface BasicListState {
@@ -51,7 +51,7 @@ interface BasicListState {
   current?: Partial<BasicListItemDataType>;
   searchkey?: string;
 }
-const PageHeaderContent: React.FC<{ currentUser: CurrentUser }> = ({ currentUser }) => {
+const PageHeaderContent: React.FC<{ currentUser: Partial<CurrentUser> }> = ({ currentUser }) => {
   const loading = currentUser && Object.keys(currentUser).length;
   if (!loading) {
     return <Skeleton avatar paragraph={{ rows: 1 }} active />;
@@ -106,7 +106,7 @@ BasicListState
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'listBasicList/fetch',
+      type: 'listBasicList/init',
     });
   }
 
@@ -232,9 +232,8 @@ BasicListState
 
   render() {
     const {
-      listBasicList: { list, meta },
-      loading,
-      currentUser,
+      listBasicList: { list, meta,currentUser  },
+      loading,      
     } = this.props;
     const {
       form: { getFieldDecorator, getFieldValue, },

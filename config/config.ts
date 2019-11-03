@@ -142,11 +142,11 @@ export default {
                 //   path: '/dashboard/workplace',
                 //   component: './dashboard/workplace',
                 // },
-                {
-                  name: 'basic-list',
-                  path: '/dashboard/basic-list',
-                  component: './dashboard/basic-list',
-                },
+                // {
+                //   name: 'basic-list',
+                //   path: '/dashboard/basic-list',
+                //   component: './dashboard/basic-list',
+                // },
               ],
             },
             {
@@ -326,11 +326,11 @@ export default {
             //     },
             //   ],
             // },
-            // {
-            //   path: '/',
-            //   redirect: '/dashboard/analysis',
-            //   authority: ['admin', 'user'],
-            // },
+            {
+              path: '/',
+              redirect: '/dashboard/analysis',
+              authority: ['admin', 'user'],
+            },
             // {
             //   component: '404',
             // },
