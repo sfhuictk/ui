@@ -18,6 +18,7 @@ import {
   // Row,
   Select,
   Skeleton,
+  Tabs,
   Result,
 } from 'antd';
 import React, { Component } from 'react';
@@ -37,6 +38,7 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const SelectOption = Select.Option;
 const { Search, TextArea } = Input;
+const { TabPane } = Tabs;
 
 interface BasicListProps extends FormComponentProps {
   listBasicList: StateType;
@@ -230,10 +232,14 @@ BasicListState
     });
   }
 
+  handleTabChange = () => {
+
+  }
+
   render() {
     const {
-      listBasicList: { list, meta,currentUser  },
-      loading,      
+      listBasicList: { list, meta, currentUser },
+      loading,
     } = this.props;
     const {
       form: { getFieldDecorator, getFieldValue, },
@@ -442,14 +448,16 @@ BasicListState
 
     return (
       <>
-        <PageHeaderWrapper 
-        content={<PageHeaderContent currentUser={currentUser} />}
+        <PageHeaderWrapper
+          content={<PageHeaderContent currentUser={currentUser} />}
         >
+
           <div className={styles.standardList}>
+
             <Card
               className={styles.listCard}
               bordered={false}
-              title="基本列表"
+              title="我的工作"
               style={{ marginTop: 24 }}
               bodyStyle={{ padding: '0 32px 40px 32px' }}
               extra={extraContent}
@@ -464,41 +472,52 @@ BasicListState
                   this.addBtn = findDOMNode(component) as HTMLButtonElement;
                 }}
               >
-                添加
+                新建工单
               </Button>
-              <List
-                size="large"
-                rowKey="id"
-                loading={loading}
-                pagination={paginationProps}
-                dataSource={list}
-                renderItem={item => (
-                  <List.Item
-                    actions={[
-                      <Button
-                        type="link"
-                        disabled={item.status <= 4}
-                        key="edit"
-                        onClick={e => {
-                          e.preventDefault();
-                          this.showEditModal(item);
-                        }}
-                      >
-                        编辑
+              <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
+                <TabPane tab="最近开单" key="1">
+                  <List
+                    size="large"
+                    rowKey="id"
+                    loading={loading}
+                    pagination={paginationProps}
+                    dataSource={list}
+                    renderItem={item => (
+                      <List.Item
+                        actions={[
+                          <Button
+                            type="link"
+                            disabled={item.status <= 4}
+                            key="edit"
+                            onClick={e => {
+                              e.preventDefault();
+                              this.showEditModal(item);
+                            }}
+                          >
+                            编辑
                       </Button>,
-                      <MoreBtn key="more" item={item} />,
-                    ]}
-                  >
-                    <List.Item.Meta
-                      // avatar={<Avatar src={item.logo} shape="square" size="large" alt={item.id} />}
-                      avatar={<Avatar style={{ backgroundColor: '#1890FF', verticalAlign: 'middle' }} shape="square" size="large" >{item.id}</Avatar>}
-                      title={<a onClick={this.showDrawer.bind(this, item)} href={item.href}>{item.customer}</a>}
-                      description={item.address}
-                    />
-                    <ListContent data={item} />
-                  </List.Item>
-                )}
-              />
+                          <MoreBtn key="more" item={item} />,
+                        ]}
+                      >
+                        <List.Item.Meta
+                          // avatar={<Avatar src={item.logo} shape="square" size="large" alt={item.id} />}
+                          avatar={<Avatar style={{ backgroundColor: '#1890FF', verticalAlign: 'middle' }} shape="square" size="large" >{item.id}</Avatar>}
+                          title={<a onClick={this.showDrawer.bind(this, item)} >{item.customer}</a>}
+                          description={item.address}
+                        />
+                        <ListContent data={item} />
+                      </List.Item>
+                    )}
+                  />
+                </TabPane>
+                <TabPane tab="等待结算" key="2">
+                  Content of Tab Pane 2
+              </TabPane>
+                <TabPane tab="Tab 3" key="3">
+                  Content of Tab Pane 3
+              </TabPane>
+              </Tabs>
+
             </Card>
           </div>
         </PageHeaderWrapper>
