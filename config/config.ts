@@ -132,16 +132,16 @@ export default {
                   path: '/dashboard/analysis',
                   component: './dashboard/analysis',
                 },
-                // {
-                //   name: 'monitor',
-                //   path: '/dashboard/monitor',
-                //   component: './dashboard/monitor',
-                // },
-                // {
-                //   name: 'workplace',
-                //   path: '/dashboard/workplace',
-                //   component: './dashboard/workplace',
-                // },
+                {
+                  name: 'monitor',
+                  path: '/dashboard/monitor',
+                  component: './dashboard/monitor',
+                },
+                {
+                  name: 'workplace',
+                  path: '/dashboard/workplace',
+                  component: './dashboard/workplace',
+                },
                 // {
                 //   name: 'basic-list',
                 //   path: '/dashboard/basic-list',
