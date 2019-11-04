@@ -18,7 +18,6 @@ import {
   // Row,
   Select,
   Skeleton,
-  Tabs,
   Result,
 } from 'antd';
 import React, { Component } from 'react';
@@ -38,7 +37,6 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const SelectOption = Select.Option;
 const { Search, TextArea } = Input;
-const { TabPane } = Tabs;
 
 interface BasicListProps extends FormComponentProps {
   listBasicList: StateType;
@@ -52,6 +50,7 @@ interface BasicListState {
   done: boolean;
   current?: Partial<BasicListItemDataType>;
   searchkey?: string;
+  filter?: string;
 }
 const PageHeaderContent: React.FC<{ currentUser: Partial<CurrentUser> }> = ({ currentUser }) => {
   const loading = currentUser && Object.keys(currentUser).length;
@@ -96,7 +95,7 @@ class Reception extends Component<
 BasicListProps,
 BasicListState
 > {
-  state: BasicListState = { visible: false, done: false, current: undefined, drawervisible: false, searchkey: '' };
+  state: BasicListState = { visible: false, done: false, current: undefined, drawervisible: false, searchkey: '', filter: '99' };
 
   formLayout = {
     labelCol: { span: 7 },
@@ -154,18 +153,7 @@ BasicListState
     });
   };
 
-  handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const status = e.target.value == 'process' ? 4 : e.target.value == 'done' ? 99 : '';
-    const { dispatch, listBasicList } = this.props;
-    dispatch({
-      type: 'listBasicList/filter',
-      payload: {
-        data: listBasicList,
-        filter: status,
-        count: 5,
-      },
-    });
-  }
+
 
   //联系人表单联动
   handleCustomerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -203,11 +191,29 @@ BasicListState
     });
   };
 
+  handleFilter = (e: any) => {
+    console.log(e);
+    const status = e.target.value !== '99' ? e.target.value : undefined;
+    const { dispatch } = this.props;    
+    const { searchkey, filter } = this.state;
+    if (status !== filter) {
+      const payload = { filter: status, searchkey: searchkey };
+      this.setState({
+        filter: status,
+      });
+      console.log(payload);
+      dispatch({
+        type: 'listBasicList/fetch',
+        payload: payload,
+      });
+    }
+  }
+
   handleSearch = (e: string) => {
     const { dispatch } = this.props;
-    const { searchkey } = this.state;
+    const { searchkey,filter } = this.state;
     if (e !== searchkey) {
-      const payload = { searchkey: e };
+      const payload = { filter: filter, searchkey: e };
       this.setState({
         searchkey: e,
       });
@@ -220,20 +226,17 @@ BasicListState
   }
 
   handlePaginate = (e: any) => {
-    console.log({ e });
+    // console.log({ e });
     const { dispatch } = this.props;
-    const { searchkey } = this.state;
+    const { searchkey,filter } = this.state;
     dispatch({
       type: 'listBasicList/fetch',
       payload: {
         page: e,
         searchkey: searchkey,
+        filter: filter,
       },
     });
-  }
-
-  handleTabChange = () => {
-
   }
 
   render() {
@@ -265,11 +268,12 @@ BasicListState
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
     const extraContent = (
-      <div className={styles.extraContent} onChange={this.handleFilter}>
-        <RadioGroup defaultValue="all">
-          <RadioButton value="all">全部</RadioButton>
-          <RadioButton value="progress">进行中</RadioButton>
-          <RadioButton value="done">完成</RadioButton>
+      <div className={styles.extraContent} >
+        <RadioGroup onChange={this.handleFilter} defaultValue="99">
+          <RadioButton value="99">全部</RadioButton>
+          <RadioButton value="1">最近开单</RadioButton>          
+          <RadioButton value="9">待接收结算书</RadioButton>
+          <RadioButton value="8">等待结算</RadioButton>
         </RadioGroup>
         <Search className={styles.extraContentSearch} placeholder="请输入" onSearch={this.handleSearch} />
       </div>
@@ -449,6 +453,7 @@ BasicListState
     return (
       <>
         <PageHeaderWrapper
+          title={'我的工作台'}
           content={<PageHeaderContent currentUser={currentUser} />}
         >
 
@@ -457,7 +462,7 @@ BasicListState
             <Card
               className={styles.listCard}
               bordered={false}
-              title="我的工作"
+              title="派工单"
               style={{ marginTop: 24 }}
               bodyStyle={{ padding: '0 32px 40px 32px' }}
               extra={extraContent}
@@ -474,50 +479,39 @@ BasicListState
               >
                 新建工单
               </Button>
-              <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
-                <TabPane tab="最近开单" key="1">
-                  <List
-                    size="large"
-                    rowKey="id"
-                    loading={loading}
-                    pagination={paginationProps}
-                    dataSource={list}
-                    renderItem={item => (
-                      <List.Item
-                        actions={[
-                          <Button
-                            type="link"
-                            disabled={item.status <= 4}
-                            key="edit"
-                            onClick={e => {
-                              e.preventDefault();
-                              this.showEditModal(item);
-                            }}
-                          >
-                            编辑
-                      </Button>,
-                          <MoreBtn key="more" item={item} />,
-                        ]}
+              <List
+                size="large"
+                rowKey="id"
+                loading={loading}
+                pagination={paginationProps}
+                dataSource={list}
+                renderItem={item => (
+                  <List.Item
+                    actions={[
+                      <Button
+                        type="link"
+                        disabled={item.status <= 4}
+                        key="edit"
+                        onClick={e => {
+                          e.preventDefault();
+                          this.showEditModal(item);
+                        }}
                       >
-                        <List.Item.Meta
-                          // avatar={<Avatar src={item.logo} shape="square" size="large" alt={item.id} />}
-                          avatar={<Avatar style={{ backgroundColor: '#1890FF', verticalAlign: 'middle' }} shape="square" size="large" >{item.id}</Avatar>}
-                          title={<a onClick={this.showDrawer.bind(this, item)} >{item.customer}</a>}
-                          description={item.address}
-                        />
-                        <ListContent data={item} />
-                      </List.Item>
-                    )}
-                  />
-                </TabPane>
-                <TabPane tab="等待结算" key="2">
-                  Content of Tab Pane 2
-              </TabPane>
-                <TabPane tab="Tab 3" key="3">
-                  Content of Tab Pane 3
-              </TabPane>
-              </Tabs>
-
+                        编辑
+                      </Button>,
+                      <MoreBtn key="more" item={item} />,
+                    ]}
+                  >
+                    <List.Item.Meta
+                      // avatar={<Avatar src={item.logo} shape="square" size="large" alt={item.id} />}
+                      avatar={<Avatar style={{ backgroundColor: '#1890FF', verticalAlign: 'middle' }} shape="square" size="large" >{item.id}</Avatar>}
+                      title={<a onClick={this.showDrawer.bind(this, item)} >{item.customer}</a>}
+                      description={item.address}
+                    />
+                    <ListContent data={item} />
+                  </List.Item>
+                )}
+              />
             </Card>
           </div>
         </PageHeaderWrapper>
