@@ -95,7 +95,7 @@ class Reception extends Component<
 BasicListProps,
 BasicListState
 > {
-  state: BasicListState = { visible: false, done: false, current: undefined, drawervisible: false, searchkey: '', filter: '99' };
+  state: BasicListState = { visible: false, done: false, current: undefined, drawervisible: false, searchkey: '', filter: '' };
 
   formLayout = {
     labelCol: { span: 7 },
