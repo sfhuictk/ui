@@ -39,7 +39,7 @@ const SelectOption = Select.Option;
 const { Search, TextArea } = Input;
 
 interface BasicListProps extends FormComponentProps {
-  listBasicList: StateType;
+  reception: StateType;
   dispatch: Dispatch<any>;
   loading: boolean;
   currentUser: CurrentUser;
@@ -78,16 +78,16 @@ const PageHeaderContent: React.FC<{ currentUser: Partial<CurrentUser> }> = ({ cu
 
 @connect(
   ({
-    listBasicList,
+    reception,
     loading,
   }: {
-    listBasicList: StateType;
+    reception: StateType;
     loading: {
       models: { [key: string]: boolean };
     };
   }) => ({
-    listBasicList,
-    loading: loading.models.listBasicList,
+    reception,
+    loading: loading.models.reception,
   }),
 )
 
@@ -107,7 +107,7 @@ BasicListState
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'listBasicList/init',
+      type: 'reception/init',
     });
   }
 
@@ -177,7 +177,7 @@ BasicListState
         done: true,
       });
       dispatch({
-        type: 'listBasicList/submit',
+        type: 'reception/submit',
         payload: { id, ...fieldsValue },
       });
     });
@@ -186,7 +186,7 @@ BasicListState
   deleteItem = (id: string) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'listBasicList/submit',
+      type: 'reception/submit',
       payload: { id },
     });
   };
@@ -203,7 +203,7 @@ BasicListState
       });
       console.log(payload);
       dispatch({
-        type: 'listBasicList/fetch',
+        type: 'reception/fetch',
         payload: payload,
       });
     }
@@ -219,7 +219,7 @@ BasicListState
       });
       console.log(payload);
       dispatch({
-        type: 'listBasicList/fetch',
+        type: 'reception/fetch',
         payload: payload,
       });
     }
@@ -230,7 +230,7 @@ BasicListState
     const { dispatch } = this.props;
     const { searchkey,filter } = this.state;
     dispatch({
-      type: 'listBasicList/fetch',
+      type: 'reception/fetch',
       payload: {
         page: e,
         searchkey: searchkey,
@@ -241,7 +241,7 @@ BasicListState
 
   render() {
     const {
-      listBasicList: { list, meta, currentUser },
+      reception: { list, meta, currentUser },
       loading,
     } = this.props;
     const {

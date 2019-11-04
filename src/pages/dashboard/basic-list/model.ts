@@ -26,12 +26,12 @@ export interface ModelType {
   reducers: {
     changelistid : Reducer<StateType>;
     queryList: Reducer<StateType>;
-    appendList: Reducer<StateType>;
+    clear: Reducer<StateType>;
   };
 }
 
 const Model: ModelType = {
-  namespace: 'list',
+  namespace: 'listBasicList',
 
   state: {
     list: [],
@@ -89,10 +89,11 @@ const Model: ModelType = {
         meta: action.payload['meta'],
       };
     },
-    appendList(state = { list: [] }, action) {
+    clear(state) {
       return {
         ...state,
-        list: state.list.concat(action.payload),
+        list: [],
+        meta: [],
       };
     },
   },

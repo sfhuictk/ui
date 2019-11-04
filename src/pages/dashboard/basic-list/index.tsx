@@ -2,23 +2,13 @@ import {
   Avatar,
   Button,
   Card,
-  // Col,
-  Dropdown,
   Descriptions,
   Divider,
   Drawer,
   Form,
-  Icon,
   Input,
   List,
-  Menu,
-  Modal,
   Progress,
-  Radio,
-  // Row,
-  Select,
-  Skeleton,
-  Result,
 } from 'antd';
 import React, { Component } from 'react';
 
@@ -26,22 +16,18 @@ import { Dispatch } from 'redux';
 import { FormComponentProps } from 'antd/es/form';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
-import { findDOMNode } from 'react-dom';
 import moment from 'moment';
 import { StateType } from './model';
 import { BasicListItemDataType, CurrentUser } from './data.d';
 import styles from './style.less';
 
-const FormItem = Form.Item;
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
-const SelectOption = Select.Option;
-const { Search, TextArea } = Input;
+const { Search } = Input;
+let timeout: any;
 
 interface BasicListProps extends FormComponentProps {
   listBasicList: StateType;
   dispatch: Dispatch<any>;
-  loading: boolean;  
+  loading: boolean;
   currentUser: CurrentUser;
 }
 interface BasicListState {
@@ -51,29 +37,6 @@ interface BasicListState {
   current?: Partial<BasicListItemDataType>;
   searchkey?: string;
 }
-const PageHeaderContent: React.FC<{ currentUser: CurrentUser }> = ({ currentUser }) => {
-  const loading = currentUser && Object.keys(currentUser).length;
-  if (!loading) {
-    return <Skeleton avatar paragraph={{ rows: 1 }} active />;
-  }
-  return (
-    <div className={styles.pageHeaderContent}>
-      <div className={styles.avatar}>
-        <Avatar size="large" src={currentUser.avatar} />
-      </div>
-      <div className={styles.content}>
-        <div className={styles.contentTitle}>
-          早安，
-          {currentUser.name}
-          ，祝你开心每一天！
-        </div>
-        <div>
-          {currentUser.title} |{currentUser.group}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 @connect(
   ({
@@ -104,10 +67,10 @@ BasicListState
   addBtn: HTMLButtonElement | undefined | null = undefined;
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'listBasicList/fetch',
-    });
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'listBasicList/fetch',
+    // });
   }
 
   showModal = () => {
@@ -130,50 +93,6 @@ BasicListState
     })
   }
 
-  showEditModal = (item: BasicListItemDataType) => {
-    this.setState({
-      visible: true,
-      current: item,
-    });
-  };
-
-  handleDone = () => {
-    setTimeout(() => this.addBtn && this.addBtn.blur(), 0);
-    this.setState({
-      done: false,
-      visible: false,
-    });
-  };
-
-  handleCancel = () => {
-    setTimeout(() => this.addBtn && this.addBtn.blur(), 0);
-    this.setState({
-      visible: false,
-    });
-  };
-
-  handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const status = e.target.value == 'process' ? 4 : e.target.value == 'done' ? 99 : '';
-    const { dispatch, listBasicList } = this.props;
-    dispatch({
-      type: 'listBasicList/filter',
-      payload: {
-        data: listBasicList,
-        filter: status,
-        count: 5,
-      },
-    });
-  }
-
-  //联系人表单联动
-  handleCustomerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { current } = this.state;
-    const content = !current && e.target.value && e.target.value.length <= 3 ? e.target.value : '';
-    this.props.form.setFieldsValue({
-      contacter: content,
-    });
-  };
-
   handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const { dispatch, form } = this.props;
@@ -193,28 +112,37 @@ BasicListState
     });
   };
 
-  deleteItem = (id: string) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'listBasicList/submit',
-      payload: { id },
-    });
-  };
 
-  handleSearch = (e: string) => {
+  handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { dispatch } = this.props;
-    const { searchkey } = this.state;
-    if (e !== searchkey) {
-      const payload = { searchkey: e };
-      this.setState({
-        searchkey: e,
-      });
-      console.log(payload);
-      dispatch({
-        type: 'listBasicList/fetch',
-        payload: payload,
-      });
+    // const { searchkey } = this.state;
+    const payload = { searchkey: e.currentTarget.value };
+    const query = () => {
+      if (payload['searchkey'] != '') {
+        dispatch({
+          type: 'listBasicList/fetch',
+          payload: payload,
+        });
+      }
+      else{
+        dispatch({
+          type: 'listBasicList/clear',
+        });
+      }
     }
+
+    this.setState({
+      searchkey: e.currentTarget.value,
+    });
+
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+
+    // console.log(`${payload['searchkey']}--${searchkey}`);
+
+    timeout = setTimeout(query, 1000);
   }
 
   handlePaginate = (e: any) => {
@@ -234,39 +162,13 @@ BasicListState
     const {
       listBasicList: { list, meta },
       loading,
-      currentUser,
-    } = this.props;
-    const {
-      form: { getFieldDecorator, getFieldValue, },
     } = this.props;
 
-    const { visible, done, current = {} } = this.state;
-
-    const editAndDelete = (key: string, currentItem: BasicListItemDataType) => {
-      if (key === 'edit') this.showEditModal(currentItem);
-      else if (key === 'delete') {
-        Modal.confirm({
-          title: '删除任务',
-          content: '确定删除该任务吗？',
-          okText: '确认',
-          cancelText: '取消',
-          onOk: () => this.deleteItem(currentItem.id),
-        });
-      }
-    };
-
-    const modalFooter = done
-      ? { footer: null, onCancel: this.handleDone }
-      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+    const { current = {} } = this.state;
 
     const extraContent = (
-      <div className={styles.extraContent} onChange={this.handleFilter}>
-        <RadioGroup defaultValue="all">
-          <RadioButton value="all">全部</RadioButton>
-          <RadioButton value="progress">进行中</RadioButton>
-          <RadioButton value="done">完成</RadioButton>
-        </RadioGroup>
-        <Search className={styles.extraContentSearch} placeholder="请输入" onSearch={this.handleSearch} />
+      <div className={styles.extraContent} >
+        <Search className={styles.extraContentSearch} placeholder="单号 | 姓名 | 地址 | 联系人 | 电话" onChange={this.handleSearch} />
       </div>
     );
 
@@ -308,111 +210,6 @@ BasicListState
         </div>
       );
 
-    const MoreBtn: React.FC<{
-      item: BasicListItemDataType;
-    }> = ({ item }) => (
-      <Dropdown
-        overlay={
-          <Menu onClick={({ key }) => editAndDelete(key, item)}>
-            <Menu.Item disabled={item.status <= 4} key="edit">编辑</Menu.Item>
-            <Menu.Item key="delete">删除</Menu.Item>
-          </Menu>
-        }
-      >
-        <a>
-          更多 <Icon type="down" />
-        </a>
-      </Dropdown>
-    );
-
-    const getModalContent = () => {
-      if (done) {
-        return (
-          <Result
-            status="success"
-            title="操作成功"
-            subTitle="一系列的信息描述，很短同样也可以带标点。"
-            extra={
-              <Button type="primary" onClick={this.handleDone}>
-                知道了
-              </Button>
-            }
-            className={styles.formResult}
-          />
-        );
-      }
-      return (
-        <Form onSubmit={this.handleSubmit}>
-          <FormItem label="客户名称" {...this.formLayout}>
-            {getFieldDecorator('customer', {
-              rules: [{ required: true, message: '请输入客户名称' }],
-              initialValue: current.customer,
-            })(<Input onChange={this.handleCustomerChange} placeholder="请输入" />)}
-          </FormItem>
-          <FormItem label="联系人" {...this.formLayout}>
-            {getFieldDecorator('contacter', {
-              rules: [{ required: false, message: '请输入联系人' }],
-              initialValue: current.contacter,
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem label="手机" {...this.formLayout}>
-            {getFieldDecorator('phone', {
-              rules: [{ required: true, pattern: new RegExp(/^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$/, "g"), message: '请输入手机号码' }],
-              initialValue: current.phone,
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem label="安装地址" {...this.formLayout}>
-            {getFieldDecorator('address', {
-              rules: [{ required: true, message: '请输入安装地址' }],
-              initialValue: current.address,
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem label="预付款" {...this.formLayout}>
-            {getFieldDecorator('prepayments', {
-              rules: [{ required: false, message: '请输入预付款' }],
-              initialValue: current.prepayments,
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem label="收据编号" {...this.formLayout} style={{
-            display: getFieldValue('prepayments') > 0 ? 'block' : 'none',
-          }} >
-            {getFieldDecorator('receipt', {
-              rules: [{ required: true, message: '请输入收据编号' }],
-              initialValue: '000000',
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem label="安装类型" {...this.formLayout}>
-            {getFieldDecorator('type', {
-              rules: [{ required: true, message: '请选择安装类型' }],
-              initialValue: current.type,
-            })(
-              <Select placeholder="请选择">
-                <SelectOption value="新装">新装</SelectOption>
-                <SelectOption value="迁移">迁移</SelectOption>
-                <SelectOption value="老户新增">老户新增</SelectOption>
-                <SelectOption value="改管">改管</SelectOption>
-                <SelectOption value="抄表到户">抄表到户</SelectOption>
-              </Select>,
-            )}
-          </FormItem>
-          <FormItem label="原户号" {...this.formLayout} style={{
-            display: getFieldValue('type') == '老户新增' || getFieldValue('type') == '迁移' ? 'block' : 'none',
-          }} >
-            {getFieldDecorator('original_account', {
-              rules: [{ required: true, message: '请输入原户号' }],
-              initialValue: '',
-            })(<Input placeholder="请输入原户号" />)}
-          </FormItem>
-          <FormItem {...this.formLayout} label="备注">
-            {getFieldDecorator('remark', {
-              rules: [{ message: '请输入至少五个字符的备注内容！', min: 5 }],
-              initialValue: current.remark,
-            })(<TextArea rows={4} placeholder="请输入至少五个字符" />)}
-          </FormItem>
-        </Form>
-      );
-    };
-
     const getDrawerContent = () => {
       return (
         // <div>还没弄好</div>
@@ -443,78 +240,47 @@ BasicListState
 
     return (
       <>
-        <PageHeaderWrapper 
-        content={<PageHeaderContent currentUser={currentUser} />}
-        >
-          <div className={styles.standardList}>
-            <Card
-              className={styles.listCard}
-              bordered={false}
-              title="基本列表"
-              style={{ marginTop: 24 }}
-              bodyStyle={{ padding: '0 32px 40px 32px' }}
-              extra={extraContent}
-            >
-              <Button
-                type="dashed"
-                style={{ width: '100%', marginBottom: 8 }}
-                icon="plus"
-                onClick={this.showModal}
-                ref={component => {
-                  // eslint-disable-next-line  react/no-find-dom-node
-                  this.addBtn = findDOMNode(component) as HTMLButtonElement;
-                }}
-              >
-                添加
-              </Button>
-              <List
-                size="large"
-                rowKey="id"
-                loading={loading}
-                pagination={paginationProps}
-                dataSource={list}
-                renderItem={item => (
-                  <List.Item
-                    actions={[
-                      <Button
-                        type="link"
-                        disabled={item.status <= 4}
-                        key="edit"
-                        onClick={e => {
-                          e.preventDefault();
-                          this.showEditModal(item);
-                        }}
-                      >
-                        编辑
-                      </Button>,
-                      <MoreBtn key="more" item={item} />,
-                    ]}
-                  >
-                    <List.Item.Meta
-                      // avatar={<Avatar src={item.logo} shape="square" size="large" alt={item.id} />}
-                      avatar={<Avatar style={{ backgroundColor: '#1890FF', verticalAlign: 'middle' }} shape="square" size="large" >{item.id}</Avatar>}
-                      title={<a onClick={this.showDrawer.bind(this, item)} href={item.href}>{item.customer}</a>}
-                      description={item.address}
-                    />
-                    <ListContent data={item} />
-                  </List.Item>
-                )}
-              />
+        <PageHeaderWrapper
+          title={'派工单查询'}
+          content={<div className={styles.standardList}>
+            <Card bordered={false}>
+              {extraContent}
             </Card>
-          </div>
+            <Divider />
+            <List
+              size="large"
+              rowKey="id"
+              loading={loading}
+              pagination={paginationProps}
+              dataSource={list}
+              renderItem={item => (
+                <List.Item
+                  actions={[
+                    <Button
+                      type="link"
+                      disabled={item.status <= 4}
+                      key="edit"
+                      onClick={e => {
+                        e.preventDefault();
+                        this.showDrawer(item);
+                      }}
+                    >
+                      详情
+                      </Button>,
+                  ]}
+                >
+                  <List.Item.Meta
+                    // avatar={<Avatar src={item.logo} shape="square" size="large" alt={item.id} />}
+                    avatar={<Avatar style={{ backgroundColor: '#1890FF', verticalAlign: 'middle' }} shape="square" size="large" >{item.id}</Avatar>}
+                    title={<a onClick={this.showDrawer.bind(this, item)} href={item.href}>{item.customer}</a>}
+                    description={item.address}
+                  />
+                  <ListContent data={item} />
+                </List.Item>
+              )}
+            />
+          </div>} >
         </PageHeaderWrapper>
-
-        <Modal
-          title={done ? null : `${current.id ? '编辑' : '添加'}工单`}
-          className={styles.standardListForm}
-          width={640}
-          bodyStyle={done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
-          destroyOnClose
-          visible={visible}
-          {...modalFooter}
-        >
-          {getModalContent()}
-        </Modal>
 
         <Drawer
           destroyOnClose={true}
