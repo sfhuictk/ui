@@ -146,7 +146,7 @@ BasicListState
   }
 
   handlePaginate = (e: any) => {
-    console.log({ e });
+    // console.log({ e });
     const { dispatch } = this.props;
     const { searchkey } = this.state;
     dispatch({
@@ -241,12 +241,11 @@ BasicListState
     return (
       <>
         <PageHeaderWrapper
-          title={'派工单查询'}
+          // title={'派工单查询'}
           content={<div className={styles.standardList}>
-            <Card bordered={false}>
+            <Card bordered={false} >
               {extraContent}
             </Card>
-            <Divider />
             <List
               size="large"
               rowKey="id"
@@ -258,8 +257,6 @@ BasicListState
                   actions={[
                     <Button
                       type="link"
-                      disabled={item.status <= 4}
-                      key="edit"
                       onClick={e => {
                         e.preventDefault();
                         this.showDrawer(item);
