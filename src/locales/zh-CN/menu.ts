@@ -12,6 +12,7 @@ export default {
   'menu.dashboard.workplace': '工作台',
   'menu.mywork': '工作台',
   'menu.mywork.reception': '前台',
+  'menu.mywork.engineering': '工程部',  
   'menu.exception.403': '403',
   'menu.exception.404': '404',
   'menu.exception.500': '500',

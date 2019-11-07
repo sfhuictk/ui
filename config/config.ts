@@ -31,11 +31,11 @@ const plugins: IPlugin[] = [
       // },
       pwa: pwa
         ? {
-            workboxPluginMode: 'InjectManifest',
-            workboxOptions: {
-              importWorkboxFrom: 'local',
-            },
-          }
+          workboxPluginMode: 'InjectManifest',
+          workboxOptions: {
+            importWorkboxFrom: 'local',
+          },
+        }
         : false, // default close dll, because issue https://github.com/ant-design/ant-design-pro/issues/4665
       // dll features https://webpack.js.org/plugins/dll-plugin/
       // dll: {
@@ -137,11 +137,11 @@ export default {
                   path: '/dashboard/monitor',
                   component: './dashboard/monitor',
                 },
-                {
-                  name: 'workplace',
-                  path: '/dashboard/workplace',
-                  component: './dashboard/workplace',
-                },
+                // {
+                //   name: 'workplace',
+                //   path: '/dashboard/workplace',
+                //   component: './dashboard/workplace',
+                // },
                 {
                   name: 'basic-list',
                   path: '/dashboard/basic-list',
@@ -158,6 +158,32 @@ export default {
                   name: 'reception',
                   path: '/mywork/reception',
                   component: './mywork/reception',
+                },
+                {
+                  path: '/mywork/engineering',
+                  name: 'engineering',
+                  component: './mywork/engineering',
+                  routes: [
+                    {
+                      path: '/mywork/engineering',
+                      redirect: '/mywork/engineering/articles',
+                    },
+                    {
+                      name: 'articles',
+                      path: '/mywork/engineering/articles',
+                      component: './mywork/engineering/articles',
+                    },
+                    {
+                      name: 'projects',
+                      path: '/mywork/engineering/projects',
+                      component: './mywork/engineering/projects',
+                    },
+                    {
+                      name: 'applications',
+                      path: '/mywork/engineering/applications',
+                      component: './mywork/engineering/applications',
+                    },
+                  ],
                 },
               ]
             },
