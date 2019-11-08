@@ -398,7 +398,7 @@ BasicListState
               >新建工单</Button>
             }
           >
-            <Card>
+            <Card className={styles.Card} bordered={false}>
               <List
                 size="large"
                 rowKey="id"
