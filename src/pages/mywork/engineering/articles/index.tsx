@@ -14,17 +14,14 @@ import {
   Menu,
   Modal,
   Progress,
-  Radio,
   // Row,
   Select,
-  Skeleton,
   Result,
 } from 'antd';
 import React, { Component } from 'react';
 
 import { Dispatch } from 'redux';
 import { FormComponentProps } from 'antd/es/form';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import { findDOMNode } from 'react-dom';
 import moment from 'moment';
@@ -33,13 +30,11 @@ import { BasicListItemDataType, CurrentUser } from './data';
 import styles from './style.less';
 
 const FormItem = Form.Item;
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
 const SelectOption = Select.Option;
-const { Search, TextArea } = Input;
+const { TextArea } = Input;
 
 interface BasicListProps extends FormComponentProps {
-  reception: StateType;
+  engineering: StateType;
   dispatch: Dispatch<any>;
   loading: boolean;
   currentUser: CurrentUser;
@@ -52,46 +47,23 @@ interface BasicListState {
   searchkey?: string;
   filter?: string;
 }
-const PageHeaderContent: React.FC<{ currentUser: Partial<CurrentUser> }> = ({ currentUser }) => {
-  const loading = currentUser && Object.keys(currentUser).length;
-  if (!loading) {
-    return <Skeleton avatar paragraph={{ rows: 1 }} active />;
-  }
-  return (
-    <div className={styles.pageHeaderContent}>
-      <div className={styles.avatar}>
-        <Avatar size="large" src={currentUser.avatar} />
-      </div>
-      <div className={styles.content}>
-        <div className={styles.contentTitle}>
-          早安，
-          {currentUser.name}
-          ，祝你开心每一天！
-        </div>
-        <div>
-          {currentUser.title} |{currentUser.group}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 @connect(
   ({
-    reception,
+    engineering,
     loading,
   }: {
-    reception: StateType;
+    engineering: StateType;
     loading: {
       models: { [key: string]: boolean };
     };
   }) => ({
-    reception,
-    loading: loading.models.reception,
+    engineering,
+    loading: loading.models.engineering,
   }),
 )
 
-class Reception extends Component<
+class engineering extends Component<
 BasicListProps,
 BasicListState
 > {
@@ -107,7 +79,7 @@ BasicListState
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'reception/init',
+      type: 'engineering/init',
     });
   }
 
@@ -177,41 +149,15 @@ BasicListState
         done: true,
       });
       dispatch({
-        type: 'reception/submit',
+        type: 'engineering/submit',
         payload: { id, ...fieldsValue },
       });
     });
   };
 
-  deleteItem = (id: string) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'reception/submit',
-      payload: { id },
-    });
-  };
-
-  handleFilter = (e: any) => {
-    console.log(e);
-    const status = e.target.value !== '99' ? e.target.value : undefined;
-    const { dispatch } = this.props;    
-    const { searchkey, filter } = this.state;
-    if (status !== filter) {
-      const payload = { filter: status, searchkey: searchkey };
-      this.setState({
-        filter: status,
-      });
-      console.log(payload);
-      dispatch({
-        type: 'reception/fetch',
-        payload: payload,
-      });
-    }
-  }
-
   handleSearch = (e: string) => {
     const { dispatch } = this.props;
-    const { searchkey,filter } = this.state;
+    const { searchkey, filter } = this.state;
     if (e !== searchkey) {
       const payload = { filter: filter, searchkey: e };
       this.setState({
@@ -219,7 +165,7 @@ BasicListState
       });
       console.log(payload);
       dispatch({
-        type: 'reception/fetch',
+        type: 'engineering/fetch',
         payload: payload,
       });
     }
@@ -228,9 +174,9 @@ BasicListState
   handlePaginate = (e: any) => {
     // console.log({ e });
     const { dispatch } = this.props;
-    const { searchkey,filter } = this.state;
+    const { searchkey, filter } = this.state;
     dispatch({
-      type: 'reception/fetch',
+      type: 'engineering/fetch',
       payload: {
         page: e,
         searchkey: searchkey,
@@ -241,7 +187,7 @@ BasicListState
 
   render() {
     const {
-      reception: { list, meta, currentUser },
+      engineering: { list, meta },
       loading,
     } = this.props;
     const {
@@ -252,32 +198,11 @@ BasicListState
 
     const editAndDelete = (key: string, currentItem: BasicListItemDataType) => {
       if (key === 'edit') this.showEditModal(currentItem);
-      else if (key === 'delete') {
-        Modal.confirm({
-          title: '删除任务',
-          content: '确定删除该任务吗？',
-          okText: '确认',
-          cancelText: '取消',
-          onOk: () => this.deleteItem(currentItem.id),
-        });
-      }
     };
 
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
-
-    const extraContent = (
-      <div className={styles.extraContent} >
-        <RadioGroup onChange={this.handleFilter} defaultValue="99">
-          <RadioButton value="99">全部</RadioButton>
-          <RadioButton value="1">最近开单</RadioButton>          
-          <RadioButton value="9">待接收结算书</RadioButton>
-          <RadioButton value="8">等待结算</RadioButton>
-        </RadioGroup>
-        <Search className={styles.extraContentSearch} placeholder="请输入" onSearch={this.handleSearch} />
-      </div>
-    );
 
     const paginationProps = {
       current: meta ? meta['current_page'] : 1,
@@ -452,23 +377,17 @@ BasicListState
 
     return (
       <>
-        <PageHeaderWrapper
-          title={'我的工作台'}
-          content={<PageHeaderContent currentUser={currentUser} />}
-        >
+        <div className={styles.standardList}>
 
-          <div className={styles.standardList}>
-
-            <Card
-              className={styles.listCard}
-              bordered={false}
-              title="派工单"
-              style={{ marginTop: 24 }}
-              bodyStyle={{ padding: '0 32px 40px 32px' }}
-              extra={extraContent}
-            >
+          <Card
+            className={styles.listCard}
+            bordered={false}
+            title="新开工单"
+            style={{ marginTop: 24 }}
+            bodyStyle={{ padding: '0 32px 40px 32px' }}
+            extra={
               <Button
-                type="dashed"
+                type="primary"
                 style={{ width: '100%', marginBottom: 8 }}
                 icon="plus"
                 onClick={this.showModal}
@@ -476,9 +395,10 @@ BasicListState
                   // eslint-disable-next-line  react/no-find-dom-node
                   this.addBtn = findDOMNode(component) as HTMLButtonElement;
                 }}
-              >
-                新建工单
-              </Button>
+              >新建工单</Button>
+            }
+          >
+            <Card className={styles.Card} bordered={false}>
               <List
                 size="large"
                 rowKey="id"
@@ -513,8 +433,9 @@ BasicListState
                 )}
               />
             </Card>
-          </div>
-        </PageHeaderWrapper>
+
+          </Card>
+        </div>
 
         <Modal
           title={done ? null : `${current.id ? '编辑' : '添加'}工单`}
@@ -542,4 +463,4 @@ BasicListState
   }
 }
 
-export default Form.create<BasicListProps>()(Reception);
+export default Form.create<BasicListProps>()(engineering);
