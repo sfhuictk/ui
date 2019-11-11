@@ -1,61 +1,50 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { addFakeList, queryserverFakeList, removeFakeList, queryCurrent, updateFakeList, queryserverSearch } from './service';
+import { ActivitiesType, CurrentUser, NoticeType, RadarDataType } from './data.d';
+import { fakeChartData, queryActivities, queryCurrent, queryProjectNotice } from './service';
 
-import { BasicListItemDataType, Paginate, CurrentUser } from './data';
-
-export interface StateType {
+export interface ModalState {
   currentUser: Partial<CurrentUser>;
-  list: BasicListItemDataType[];
-  meta?: Paginate[];
+  projectNotice: NoticeType[];
+  activities: ActivitiesType[];
+  radarData: RadarDataType[];
 }
 
 export type Effect = (
   action: AnyAction,
-  effects: EffectsCommandMap & { select: <T>(func: (state: StateType) => T) => T },
+  effects: EffectsCommandMap & { select: <T>(func: (state: ModalState) => T) => T },
 ) => void;
 
 export interface ModelType {
   namespace: string;
-  state: StateType;
+  state: ModalState;
+  reducers: {
+    save: Reducer<ModalState>;
+    clear: Reducer<ModalState>;
+  };
   effects: {
     init: Effect;
-    fetch: Effect;
     fetchUserCurrent: Effect;
-    search: Effect;
-    appendFetch: Effect;
-    submit: Effect;
-  };
-  reducers: {
-    // changelistid: Reducer<StateType>;
-    // queryList: Reducer<StateType>;
-    // appendList: Reducer<StateType>;
-    save: Reducer<StateType>;
+    fetchProjectNotice: Effect;
+    fetchActivitiesList: Effect;
+    fetchChart: Effect;
   };
 }
 
 const Model: ModelType = {
   namespace: 'reception',
-
   state: {
     currentUser: {},
-    list: [],
+    projectNotice: [],
+    activities: [],
+    radarData: [],
   },
-
   effects: {
     *init(_, { put }) {
       yield put({ type: 'fetchUserCurrent' });
-      yield put({ type: 'fetch' });
-    },
-    *fetch({ payload }, { call, put }) {
-      const response = yield call(queryserverFakeList, payload);
-      yield put({
-        type: 'save',
-        payload: {
-          list: response ? response['data'] : [],
-          meta: response ? response['meta'] : [],
-        }
-      });
+      yield put({ type: 'fetchProjectNotice' });
+      yield put({ type: 'fetchActivitiesList' });
+      yield put({ type: 'fetchChart' });
     },
     *fetchUserCurrent(_, { call, put }) {
       const response = yield call(queryCurrent);
@@ -66,50 +55,47 @@ const Model: ModelType = {
         },
       });
     },
-    *search({ payload }, { call, put }) {
-      const response = yield call(queryserverSearch, payload);
+    *fetchProjectNotice(_, { call, put }) {
+      const response = yield call(queryProjectNotice);
       yield put({
         type: 'save',
         payload: {
-          list: response ? response['data'] : [],
-          meta: response ? response['meta'] : [],
-        }
+          projectNotice: Array.isArray(response) ? response : [],
+        },
       });
     },
-    *appendFetch({ payload }, { call, put }) {
-      const response = yield call(queryserverFakeList, payload);
+    *fetchActivitiesList(_, { call, put }) {
+      const response = yield call(queryActivities);
       yield put({
-        type: 'appendList',
-        payload: Array.isArray(response['data']) ? response['data'] : [],
+        type: 'save',
+        payload: {
+          activities: Array.isArray(response) ? response : [],
+        },
       });
     },
-    *submit({ payload }, { call, put }) {
-      let callback;
-      if (payload.id) {
-        callback = Object.keys(payload).length === 1 ? removeFakeList : updateFakeList;
-      } else {
-        callback = addFakeList;
-      }
-      const response = yield call(callback, payload); // post
+    *fetchChart(_, { call, put }) {
+      const { radarData } = yield call(fakeChartData);
       yield put({
-        type: 'fetch',
-        payload: response['data'],
+        type: 'save',
+        payload: {
+          radarData,
+        },
       });
     },
   },
-
   reducers: {
-    // queryList(state, action) {
-    //   return {
-    //     ...state,
-    //     list: action.payload['data'],
-    //     meta: action.payload['meta'],
-    //   };
-    // },
     save(state, { payload }) {
       return {
         ...state,
         ...payload,
+      };
+    },
+    clear() {
+      return {
+        currentUser: {},
+        projectNotice: [],
+        activities: [],
+        radarData: [],
       };
     },
   },

@@ -1,23 +1,48 @@
-export interface Member {
-  avatar: string;
-  name: string;
-  id: string;
-}
-
 export interface TagType {
   key: string;
   label: string;
 }
+export interface VisitDataType {
+  x: string;
+  y: number;
+}
 
-export interface NoticeType {
-  id: string;
-  title: string;
-  logo: string;
-  description: string;
-  updatedAt: string;
-  member: string;
-  href: string;
-  memberLink: string;
+export interface SearchDataType {
+  index: number;
+  keyword: string;
+  count: number;
+  range: number;
+  status: number;
+}
+
+export interface OfflineDataType {
+  name: string;
+  cvr: number;
+}
+
+export interface OfflineChartData {
+  x: any;
+  y1: number;
+  y2: number;
+}
+
+export interface RadarData {
+  name: string;
+  label: string;
+  value: number;
+}
+
+export interface AnalysisData {
+  visitData: VisitDataType[];
+  visitData2: VisitDataType[];
+  salesData: VisitDataType[];
+  searchData: SearchDataType[];
+  offlineData: OfflineDataType[];
+  offlineChartData: OfflineChartData[];
+  salesTypeData: VisitDataType[];
+  salesTypeDataOnline: VisitDataType[];
+  salesTypeDataOffline: VisitDataType[];
+  radarData: RadarData[];
 }
 
 export interface GeographicType {
@@ -29,6 +54,17 @@ export interface GeographicType {
     label: string;
     key: string;
   };
+}
+
+export interface NoticeType {
+  id: string;
+  title: string;
+  logo: string;
+  description: string;
+  updatedAt: string;
+  member: string;
+  href: string;
+  memberLink: string;
 }
 
 export interface CurrentUser {
@@ -48,45 +84,33 @@ export interface CurrentUser {
   address: string;
   phone: string;
 }
-
-export interface BasicListItemDataType {
-  id: string;
-  customer: string;
-  construction_team: string;
-  contacter: string;
-  address: string;
-  completed_date: number;
-  created_at: number;
-  phone: string;
-  prepayments: number;
-  page: number;
-  remark: string;
+export interface Member {
   avatar: string;
-  original_account: string;
-  // status: 'normal' | 'exception' | 'active' | 'success';
-  status: number;
-  percent: number;
-  logo: string;
-  href: string;
-  body?: any;
-  updatedAt: number;
-  start_date: number;
-  subDescription: string;
-  type: string;
-  activeUser: number;
-  newUser: number;
-  star: number;
-  like: number;
-  message: number;
-  content: string;
-  members: Member[];
+  name: string;
+  id: string;
 }
 
-export interface Paginate {
-  current_page: number;
-  from: number;
-  last_page: number;
-  per_page: number;
-  to: number;
-  total: number;
-} 
+export interface ActivitiesType {
+  id: string;
+  updatedAt: string;
+  user: {
+    name: string;
+    avatar: string;
+  };
+  group: {
+    name: string;
+    link: string;
+  };
+  project: {
+    name: string;
+    link: string;
+  };
+
+  template: string;
+}
+
+export interface RadarDataType {
+  label: string;
+  name: string;
+  value: number;
+}
