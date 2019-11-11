@@ -2,19 +2,16 @@ import {
   Avatar,
   Button,
   Card,
-  // Col,
-  Dropdown,
+  // Dropdown,
   Descriptions,
   Divider,
   Drawer,
   Form,
-  Icon,
+  // Icon,
   Input,
   List,
-  Menu,
   Modal,
   Progress,
-  // Row,
   Select,
   Result,
 } from 'antd';
@@ -24,9 +21,8 @@ import { Dispatch } from 'redux';
 import { FormComponentProps } from 'antd/es/form';
 import { connect } from 'dva';
 import { findDOMNode } from 'react-dom';
-import moment from 'moment';
 import { StateType } from './model';
-import { BasicListItemDataType, CurrentUser } from './data';
+import { BasicListItemDataType } from './data';
 import styles from './style.less';
 
 const FormItem = Form.Item;
@@ -37,7 +33,6 @@ interface BasicListProps extends FormComponentProps {
   recentcreate: StateType;
   dispatch: Dispatch<any>;
   loading: boolean;
-  currentUser: CurrentUser;
 }
 interface BasicListState {
   visible: boolean;
@@ -79,7 +74,7 @@ BasicListState
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'recentcreate/init',
+      type: 'recentcreate/fetch',
     });
   }
 
@@ -155,39 +150,9 @@ BasicListState
     });
   };
 
-  handleSearch = (e: string) => {
-    const { dispatch } = this.props;
-    const { searchkey, filter } = this.state;
-    if (e !== searchkey) {
-      const payload = { filter: filter, searchkey: e };
-      this.setState({
-        searchkey: e,
-      });
-      console.log(payload);
-      dispatch({
-        type: 'recentcreate/fetch',
-        payload: payload,
-      });
-    }
-  }
-
-  handlePaginate = (e: any) => {
-    // console.log({ e });
-    const { dispatch } = this.props;
-    const { searchkey, filter } = this.state;
-    dispatch({
-      type: 'recentcreate/fetch',
-      payload: {
-        page: e,
-        searchkey: searchkey,
-        filter: filter,
-      },
-    });
-  }
-
   render() {
     const {
-      recentcreate: { list, meta },
+      recentcreate: { list },
       loading,
     } = this.props;
     const {
@@ -196,26 +161,16 @@ BasicListState
 
     const { visible, done, current = {} } = this.state;
 
-    const editAndDelete = (key: string, currentItem: BasicListItemDataType) => {
-      if (key === 'edit') this.showEditModal(currentItem);
-    };
+    // const editAndDelete = (key: string, currentItem: BasicListItemDataType) => {
+    //   if (key === 'edit') this.showEditModal(currentItem);
+    // };
 
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
-    const paginationProps = {
-      current: meta ? meta['current_page'] : 1,
-      hideOnSinglePage: true,
-      showSizeChanger: false,
-      showQuickJumper: true,
-      pageSize: 5,
-      total: meta ? meta['total'] : undefined,
-      onChange: this.handlePaginate
-    };
-
     const ListContent = ({
-      data: { construction_team, created_at, status, contacter, phone },
+      data: { prepayments, original_account, type, contacter, phone, receipt },
     }: {
       data: BasicListItemDataType;
     }) => (
@@ -229,35 +184,39 @@ BasicListState
             <p>{phone ? phone : '无'}</p>
           </div>
           <div className={styles.listContentItem}>
-            <span>施工队伍</span>
-            <p>{construction_team ? construction_team : '未派工'}</p>
+            <span>预付款</span>
+            <p>{prepayments ? prepayments : 0}</p>
           </div>
           <div className={styles.listContentItem}>
-            <span>开单日期</span>
-            <p>{moment(created_at).format('YYYY-MM-DD')}</p>
+            <span>收据编号</span>
+            <p>{receipt ? receipt : '-'}</p>
           </div>
           <div className={styles.listContentItem}>
-            <Progress percent={status ? status * 10 : 0} status={status ? status > 10 ? 'success' : 'active' : 'exception'} strokeWidth={6} style={{ width: 180 }} />
+            <span>安装类型</span>
+            <p>{type}</p>
+          </div>
+          <div className={styles.listContentItem}>
+            <span>原户号</span>
+            <p>{original_account ? original_account : '-'}</p>
           </div>
         </div>
       );
 
-    const MoreBtn: React.FC<{
-      item: BasicListItemDataType;
-    }> = ({ item }) => (
-      <Dropdown
-        overlay={
-          <Menu onClick={({ key }) => editAndDelete(key, item)}>
-            <Menu.Item disabled={item.status <= 4} key="edit">编辑</Menu.Item>
-            <Menu.Item key="delete">删除</Menu.Item>
-          </Menu>
-        }
-      >
-        <a>
-          更多 <Icon type="down" />
-        </a>
-      </Dropdown>
-    );
+    // const MoreBtn: React.FC<{
+    //   item: BasicListItemDataType;
+    // }> = ({ item }) => (
+    //   <Dropdown
+    //     overlay={
+    //       <Menu onClick={({ key }) => editAndDelete(key, item)}>
+    //         <Menu.Item key="delete">退款</Menu.Item>
+    //       </Menu>
+    //     }
+    //   >
+    //     <a>
+    //       更多 <Icon type="down" />
+    //     </a>
+    //   </Dropdown>
+    // );
 
     const getModalContent = () => {
       if (done) {
@@ -403,14 +362,12 @@ BasicListState
                 size="large"
                 rowKey="id"
                 loading={loading}
-                pagination={paginationProps}
                 dataSource={list}
                 renderItem={item => (
                   <List.Item
                     actions={[
                       <Button
                         type="link"
-                        disabled={item.status <= 4}  //按权限显示
                         key="edit"
                         onClick={e => {
                           e.preventDefault();
@@ -419,7 +376,7 @@ BasicListState
                       >
                         编辑
                       </Button>,
-                      <MoreBtn key="more" item={item} />,
+                      // <MoreBtn key="more" item={item} />,
                     ]}
                   >
                     <List.Item.Meta

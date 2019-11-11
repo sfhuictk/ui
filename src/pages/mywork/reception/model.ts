@@ -1,7 +1,7 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import { ActivitiesType, CurrentUser, NoticeType, RadarDataType } from './data.d';
-import { fakeChartData, queryActivities, queryCurrent, queryProjectNotice } from './service';
+import { queryCurrent } from './service';
 
 export interface ModalState {
   currentUser: Partial<CurrentUser>;
@@ -23,11 +23,7 @@ export interface ModelType {
     clear: Reducer<ModalState>;
   };
   effects: {
-    init: Effect;
     fetchUserCurrent: Effect;
-    fetchProjectNotice: Effect;
-    fetchActivitiesList: Effect;
-    fetchChart: Effect;
   };
 }
 
@@ -39,46 +35,13 @@ const Model: ModelType = {
     activities: [],
     radarData: [],
   },
-  effects: {
-    *init(_, { put }) {
-      yield put({ type: 'fetchUserCurrent' });
-      yield put({ type: 'fetchProjectNotice' });
-      yield put({ type: 'fetchActivitiesList' });
-      yield put({ type: 'fetchChart' });
-    },
+  effects: {    
     *fetchUserCurrent(_, { call, put }) {
       const response = yield call(queryCurrent);
       yield put({
         type: 'save',
         payload: {
           currentUser: response,
-        },
-      });
-    },
-    *fetchProjectNotice(_, { call, put }) {
-      const response = yield call(queryProjectNotice);
-      yield put({
-        type: 'save',
-        payload: {
-          projectNotice: Array.isArray(response) ? response : [],
-        },
-      });
-    },
-    *fetchActivitiesList(_, { call, put }) {
-      const response = yield call(queryActivities);
-      yield put({
-        type: 'save',
-        payload: {
-          activities: Array.isArray(response) ? response : [],
-        },
-      });
-    },
-    *fetchChart(_, { call, put }) {
-      const { radarData } = yield call(fakeChartData);
-      yield put({
-        type: 'save',
-        payload: {
-          radarData,
         },
       });
     },
