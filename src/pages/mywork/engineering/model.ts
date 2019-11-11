@@ -32,7 +32,7 @@ export interface ModelType {
 }
 
 const Model: ModelType = {
-  namespace: 'engineeringWorkplace',
+  namespace: 'engineering',
   state: {
     currentUser: {},
     projectNotice: [],

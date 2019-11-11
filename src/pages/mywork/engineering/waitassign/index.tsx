@@ -34,7 +34,7 @@ const SelectOption = Select.Option;
 const { TextArea } = Input;
 
 interface BasicListProps extends FormComponentProps {
-  engineering: StateType;
+  assign: StateType;
   dispatch: Dispatch<any>;
   loading: boolean;
   currentUser: CurrentUser;
@@ -50,20 +50,20 @@ interface BasicListState {
 
 @connect(
   ({
-    engineering,
+    assign,
     loading,
   }: {
-    engineering: StateType;
+    assign: StateType;
     loading: {
       models: { [key: string]: boolean };
     };
   }) => ({
-    engineering,
-    loading: loading.models.engineering,
+    assign,
+    loading: loading.models.assign,
   }),
 )
 
-class engineering extends Component<
+class Assign extends Component<
 BasicListProps,
 BasicListState
 > {
@@ -79,7 +79,7 @@ BasicListState
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'engineering/init',
+      type: 'assign/init',
     });
   }
 
@@ -149,7 +149,7 @@ BasicListState
         done: true,
       });
       dispatch({
-        type: 'engineering/submit',
+        type: 'assign/submit',
         payload: { id, ...fieldsValue },
       });
     });
@@ -165,7 +165,7 @@ BasicListState
       });
       console.log(payload);
       dispatch({
-        type: 'engineering/fetch',
+        type: 'assign/fetch',
         payload: payload,
       });
     }
@@ -176,7 +176,7 @@ BasicListState
     const { dispatch } = this.props;
     const { searchkey, filter } = this.state;
     dispatch({
-      type: 'engineering/fetch',
+      type: 'assign/fetch',
       payload: {
         page: e,
         searchkey: searchkey,
@@ -187,7 +187,7 @@ BasicListState
 
   render() {
     const {
-      engineering: { list, meta },
+      assign: { list, meta },
       loading,
     } = this.props;
     const {
@@ -463,4 +463,4 @@ BasicListState
   }
 }
 
-export default Form.create<BasicListProps>()(engineering);
+export default Form.create<BasicListProps>()(Assign);

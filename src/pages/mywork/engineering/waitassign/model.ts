@@ -35,7 +35,7 @@ export interface ModelType {
 }
 
 const Model: ModelType = {
-  namespace: 'engineering',
+  namespace: 'assign',
 
   state: {
     currentUser: {},

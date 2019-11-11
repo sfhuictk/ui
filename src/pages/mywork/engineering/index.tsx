@@ -50,21 +50,21 @@ const PageHeaderContent: React.FC<{ currentUser: CurrentUser }> = ({ currentUser
 
 @connect(
   ({
-    engineeringWorkplace: { currentUser },
+    engineering: { currentUser },
     loading,
   }: {
-    engineeringWorkplace: ModalState;
+    engineering: ModalState;
     loading: { effects: any };
   }) => ({
     currentUser,
-    currentUserLoading: loading.effects['engineeringWorkplace/fetchUserCurrent'],
+    currentUserLoading: loading.effects['engineering/fetchUserCurrent'],
   }),
 )
 class Search extends Component<SearchProps> {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'engineeringWorkplace/fetchUserCurrent',
+      type: 'engineering/fetchUserCurrent',
     });
   }
 
@@ -72,8 +72,8 @@ class Search extends Component<SearchProps> {
     const { match } = this.props;
     const url = match.url === '/' ? '' : match.url;
     switch (key) {
-      case 'articles':
-        router.push(`${url}/articles`);
+      case 'waitassign':
+        router.push(`${url}/waitassign`);
         break;
       case 'applications':
         router.push(`${url}/applications`);
@@ -97,14 +97,14 @@ class Search extends Component<SearchProps> {
     if (tabKey && tabKey !== '/') {
       return tabKey;
     }
-    return 'articles';
+    return 'waitassign';
   };
 
   render() {
     const tabList = [
       {
-        key: 'articles',
-        tab: '文章',
+        key: 'waitassign',
+        tab: '待派工',
       },
       {
         key: 'projects',

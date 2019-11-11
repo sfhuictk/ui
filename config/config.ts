@@ -187,12 +187,12 @@ export default {
                   routes: [
                     {
                       path: '/mywork/engineering',
-                      redirect: '/mywork/engineering/articles',
+                      redirect: '/mywork/engineering/waitassign',
                     },
                     {
-                      name: 'articles',
-                      path: '/mywork/engineering/articles',
-                      component: './mywork/engineering/articles',
+                      name: 'waitassign',
+                      path: '/mywork/engineering/waitassign',
+                      component: './mywork/engineering/waitassign',
                     },
                     {
                       name: 'projects',
