@@ -63,7 +63,7 @@ interface BasicListState {
   }),
 )
 
-class recentcreate extends Component<
+class Recentcreate extends Component<
 BasicListProps,
 BasicListState
 > {
@@ -463,4 +463,4 @@ BasicListState
   }
 }
 
-export default Form.create<BasicListProps>()(recentcreate);
+export default Form.create<BasicListProps>()(Recentcreate);
