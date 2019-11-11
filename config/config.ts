@@ -158,6 +158,27 @@ export default {
                   name: 'reception',
                   path: '/mywork/reception',
                   component: './mywork/reception',
+                  routes: [
+                    {
+                      path: '/mywork/reception',
+                      redirect: '/mywork/reception/recentcreate',
+                    },
+                    {
+                      name: 'recentcreate',
+                      path: '/mywork/reception/recentcreate',
+                      component: './mywork/reception/recentcreate',
+                    },
+                    {
+                      name: 'transfersettlement',
+                      path: '/mywork/reception/transfersettlement',
+                      component: './mywork/reception/transfersettlement',
+                    },
+                    {
+                      name: 'waitsettlement',
+                      path: '/mywork/reception/waitsettlement',
+                      component: './mywork/reception/waitsettlement',
+                    },
+                  ],
                 },
                 {
                   path: '/mywork/engineering',
