@@ -206,6 +206,32 @@ export default {
                     },
                   ],
                 },
+                {
+                  path: '/mywork/warehouse',
+                  name: 'warehouse',
+                  component: './mywork/warehouse',
+                  routes: [
+                    {
+                      path: '/mywork/warehouse',
+                      redirect: '/mywork/warehouse/neworder',
+                    },
+                    {
+                      name: 'neworder',
+                      path: '/mywork/warehouse/neworder',
+                      component: './mywork/warehouse/neworder',
+                    },
+                    // {
+                    //   name: 'projects',
+                    //   path: '/mywork/warehouse/projects',
+                    //   component: './mywork/warehouse/projects',
+                    // },
+                    // {
+                    //   name: 'applications',
+                    //   path: '/mywork/warehouse/applications',
+                    //   component: './mywork/warehouse/applications',
+                    // },
+                  ],
+                },
               ]
             },
             // {
