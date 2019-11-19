@@ -1,6 +1,6 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { addFakeList, queryserverFakeList, removeFakeList, queryCurrent, updateFakeList, queryserverSearch } from './service';
+import { queryserverFakeList, updateFakeList } from './service';
 
 import { BasicListItemDataType, Paginate, CurrentUser } from './data';
 
@@ -19,17 +19,10 @@ export interface ModelType {
   namespace: string;
   state: StateType;
   effects: {
-    init: Effect;
     fetch: Effect;
-    fetchUserCurrent: Effect;
-    search: Effect;
-    appendFetch: Effect;
     submit: Effect;
   };
   reducers: {
-    // changelistid: Reducer<StateType>;
-    // queryList: Reducer<StateType>;
-    // appendList: Reducer<StateType>;
     save: Reducer<StateType>;
   };
 }
@@ -43,10 +36,6 @@ const Model: ModelType = {
   },
 
   effects: {
-    *init(_, { put }) {
-      yield put({ type: 'fetchUserCurrent' });
-      yield put({ type: 'fetch' });
-    },
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryserverFakeList, payload);
       yield put({
@@ -57,39 +46,9 @@ const Model: ModelType = {
         }
       });
     },
-    *fetchUserCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
-      yield put({
-        type: 'save',
-        payload: {
-          currentUser: response,
-        },
-      });
-    },
-    *search({ payload }, { call, put }) {
-      const response = yield call(queryserverSearch, payload);
-      yield put({
-        type: 'save',
-        payload: {
-          list: response ? response['data'] : [],
-          meta: response ? response['meta'] : [],
-        }
-      });
-    },
-    *appendFetch({ payload }, { call, put }) {
-      const response = yield call(queryserverFakeList, payload);
-      yield put({
-        type: 'appendList',
-        payload: Array.isArray(response['data']) ? response['data'] : [],
-      });
-    },
     *submit({ payload }, { call, put }) {
       let callback;
-      if (payload.id) {
-        callback = Object.keys(payload).length === 1 ? removeFakeList : updateFakeList;
-      } else {
-        callback = addFakeList;
-      }
+         callback = updateFakeList;
       const response = yield call(callback, payload); // post
       yield put({
         type: 'fetch',
