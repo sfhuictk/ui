@@ -3,15 +3,12 @@ import {
   Button,
   Card,
   // Col,
-  Dropdown,
   Descriptions,
   Divider,
   Drawer,
   Form,
-  Icon,
   Input,
   List,
-  Menu,
   Modal,
   Progress,
   // Row,
@@ -143,6 +140,20 @@ BasicListState
     });
   };
 
+  handleMark = (item: BasicListItemDataType) => {
+    this.setState({
+      current: item,
+    });
+    const { dispatch } = this.props;
+    const id = item.id;
+
+    dispatch({
+      type: 'neworder/submit',
+      payload: { id },
+    });
+  };
+
+
   render() {
     const {
       neworder: { list },
@@ -154,9 +165,6 @@ BasicListState
 
     const { visible, done, current = {} } = this.state;
 
-    const editAndDelete = (key: string, currentItem: BasicListItemDataType) => {
-      if (key === 'edit') this.showEditModal(currentItem);
-    };
 
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
@@ -189,23 +197,6 @@ BasicListState
           </div>
         </div>
       );
-
-    const MoreBtn: React.FC<{
-      item: BasicListItemDataType;
-    }> = ({ item }) => (
-      <Dropdown
-        overlay={
-          <Menu onClick={({ key }) => editAndDelete(key, item)}>
-            <Menu.Item disabled={item.status <= 4} key="edit">编辑</Menu.Item>
-            <Menu.Item key="delete">删除</Menu.Item>
-          </Menu>
-        }
-      >
-        <a>
-          更多 <Icon type="down" />
-        </a>
-      </Dropdown>
-    );
 
     const getModalContent = () => {
       if (done) {
@@ -317,12 +308,11 @@ BasicListState
                         key="edit"
                         onClick={e => {
                           e.preventDefault();
-                          this.showEditModal(item);
+                          this.handleMark(item);
                         }}
                       >
-                        派工
+                        领料
                       </Button>,
-                      <MoreBtn key="more" item={item} />,
                     ]}
                   >
                     <List.Item.Meta

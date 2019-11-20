@@ -7,14 +7,14 @@ interface ParamsType extends Partial<BasicListItemDataType> {
 }
 
 export async function queryserverFakeList(params: ParamsType) {
-  return request('/server/api/dispatch/waitassign',{
+  return request('/server/api/dispatch/waitmaterialout',{
     params,
   });
 }
 
 export async function updateFakeList(params: ParamsType) {
   const { page = 5, ...restParams } = params;
-  return request('/server/api/dispatch/assign', {
+  return request('/server/api/dispatch/materialout', {
     method: 'POST',
     data: {
       ...restParams,
