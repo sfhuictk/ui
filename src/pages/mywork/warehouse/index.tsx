@@ -50,21 +50,21 @@ const PageHeaderContent: React.FC<{ currentUser: CurrentUser }> = ({ currentUser
 
 @connect(
   ({
-    engineering: { currentUser },
+    warehouse: { currentUser },
     loading,
   }: {
-    engineering: ModalState;
+    warehouse: ModalState;
     loading: { effects: any };
   }) => ({
     currentUser,
-    currentUserLoading: loading.effects['engineering/fetchUserCurrent'],
+    currentUserLoading: loading.effects['warehouse/fetchUserCurrent'],
   }),
 )
-class Search extends Component<SearchProps> {
+class Warehouse extends Component<SearchProps> {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'engineering/fetchUserCurrent',
+      type: 'warehouse/fetchUserCurrent',
     });
   }
 
@@ -72,8 +72,8 @@ class Search extends Component<SearchProps> {
     const { match } = this.props;
     const url = match.url === '/' ? '' : match.url;
     switch (key) {
-      case 'waitassign':
-        router.push(`${url}/waitassign`);
+      case 'neworder':
+        router.push(`${url}/neworder`);
         break;
       case 'applications':
         router.push(`${url}/applications`);
@@ -97,14 +97,14 @@ class Search extends Component<SearchProps> {
     if (tabKey && tabKey !== '/') {
       return tabKey;
     }
-    return 'waitassign';
+    return 'neworder';
   };
 
   render() {
     const tabList = [
       {
-        key: 'waitassign',
-        tab: '待派工',
+        key: 'neworder',
+        tab: '待领料的工单',
       },
       {
         key: 'projects',
@@ -131,4 +131,4 @@ class Search extends Component<SearchProps> {
   }
 }
 
-export default Search;
+export default Warehouse;

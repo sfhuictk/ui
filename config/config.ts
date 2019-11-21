@@ -187,12 +187,12 @@ export default {
                   routes: [
                     {
                       path: '/mywork/engineering',
-                      redirect: '/mywork/engineering/articles',
+                      redirect: '/mywork/engineering/waitassign',
                     },
                     {
-                      name: 'articles',
-                      path: '/mywork/engineering/articles',
-                      component: './mywork/engineering/articles',
+                      name: 'waitassign',
+                      path: '/mywork/engineering/waitassign',
+                      component: './mywork/engineering/waitassign',
                     },
                     {
                       name: 'projects',
@@ -204,6 +204,32 @@ export default {
                       path: '/mywork/engineering/applications',
                       component: './mywork/engineering/applications',
                     },
+                  ],
+                },
+                {
+                  path: '/mywork/warehouse',
+                  name: 'warehouse',
+                  component: './mywork/warehouse',
+                  routes: [
+                    {
+                      path: '/mywork/warehouse',
+                      redirect: '/mywork/warehouse/neworder',
+                    },
+                    {
+                      name: 'neworder',
+                      path: '/mywork/warehouse/neworder',
+                      component: './mywork/warehouse/neworder',
+                    },
+                    // {
+                    //   name: 'projects',
+                    //   path: '/mywork/warehouse/projects',
+                    //   component: './mywork/warehouse/projects',
+                    // },
+                    // {
+                    //   name: 'applications',
+                    //   path: '/mywork/warehouse/applications',
+                    //   component: './mywork/warehouse/applications',
+                    // },
                   ],
                 },
               ]

@@ -7,7 +7,7 @@ interface ParamsType extends Partial<BasicListItemDataType> {
 }
 
 export async function queryserverFakeList(params: ParamsType) {
-  return request('/server/api/dispatch',{
+  return request('/server/api/dispatch/recent',{
     params,
   });
 }

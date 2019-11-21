@@ -31,6 +31,23 @@ export interface GeographicType {
   };
 }
 
+export interface CurrentUser {
+  name: string;
+  avatar: string;
+  userid: string;
+  notice: NoticeType[];
+  email: string;
+  signature: string;
+  title: string;
+  group: string;
+  tags: TagType[];
+  notifyCount: number;
+  unreadCount: number;
+  country: string;
+  geographic: GeographicType;
+  address: string;
+  phone: string;
+}
 
 export interface BasicListItemDataType {
   id: string;
@@ -38,7 +55,6 @@ export interface BasicListItemDataType {
   construction_team: string;
   contacter: string;
   address: string;
-  receipt: string;
   completed_date: number;
   created_at: number;
   phone: string;

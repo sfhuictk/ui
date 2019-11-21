@@ -1,10 +1,11 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { addFakeList, queryserverFakeList, removeFakeList, updateFakeList, queryserverSearch } from './service';
+import { queryserverFakeList, updateFakeList } from './service';
 
-import { BasicListItemDataType, Paginate } from './data';
+import { BasicListItemDataType, Paginate, CurrentUser } from './data';
 
 export interface StateType {
+  currentUser: Partial<CurrentUser>;
   list: BasicListItemDataType[];
   meta?: Paginate[];
 }
@@ -19,8 +20,6 @@ export interface ModelType {
   state: StateType;
   effects: {
     fetch: Effect;
-    search: Effect;
-    appendFetch: Effect;
     submit: Effect;
   };
   reducers: {
@@ -29,9 +28,10 @@ export interface ModelType {
 }
 
 const Model: ModelType = {
-  namespace: 'recentcreate',
+  namespace: 'assign',
 
   state: {
+    currentUser: {},
     list: [],
   },
 
@@ -46,30 +46,9 @@ const Model: ModelType = {
         }
       });
     },
-    *search({ payload }, { call, put }) {
-      const response = yield call(queryserverSearch, payload);
-      yield put({
-        type: 'save',
-        payload: {
-          list: response ? response['data'] : [],
-          meta: response ? response['meta'] : [],
-        }
-      });
-    },
-    *appendFetch({ payload }, { call, put }) {
-      const response = yield call(queryserverFakeList, payload);
-      yield put({
-        type: 'appendList',
-        payload: Array.isArray(response['data']) ? response['data'] : [],
-      });
-    },
     *submit({ payload }, { call, put }) {
       let callback;
-      if (payload.id) {
-        callback = Object.keys(payload).length === 1 ? removeFakeList : updateFakeList;
-      } else {
-        callback = addFakeList;
-      }
+         callback = updateFakeList;
       const response = yield call(callback, payload); // post
       yield put({
         type: 'fetch',

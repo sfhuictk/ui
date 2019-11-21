@@ -2,16 +2,19 @@ import {
   Avatar,
   Button,
   Card,
-  // Dropdown,
+  // Col,
+  Dropdown,
   Descriptions,
   Divider,
   Drawer,
   Form,
-  // Icon,
+  Icon,
   Input,
   List,
+  Menu,
   Modal,
   Progress,
+  // Row,
   Select,
   Result,
 } from 'antd';
@@ -20,9 +23,9 @@ import React, { Component } from 'react';
 import { Dispatch } from 'redux';
 import { FormComponentProps } from 'antd/es/form';
 import { connect } from 'dva';
-import { findDOMNode } from 'react-dom';
+import moment from 'moment';
 import { StateType } from './model';
-import { BasicListItemDataType } from './data';
+import { BasicListItemDataType, CurrentUser } from './data';
 import styles from './style.less';
 
 const FormItem = Form.Item;
@@ -30,9 +33,10 @@ const SelectOption = Select.Option;
 const { TextArea } = Input;
 
 interface BasicListProps extends FormComponentProps {
-  recentcreate: StateType;
+  assign: StateType;
   dispatch: Dispatch<any>;
   loading: boolean;
+  currentUser: CurrentUser;
 }
 interface BasicListState {
   visible: boolean;
@@ -45,20 +49,20 @@ interface BasicListState {
 
 @connect(
   ({
-    recentcreate,
+    assign,
     loading,
   }: {
-    recentcreate: StateType;
+    assign: StateType;
     loading: {
       models: { [key: string]: boolean };
     };
   }) => ({
-    recentcreate,
-    loading: loading.models.recentcreate,
+    assign,
+    loading: loading.models.assign,
   }),
 )
 
-class Recentcreate extends Component<
+class Assign extends Component<
 BasicListProps,
 BasicListState
 > {
@@ -74,7 +78,7 @@ BasicListState
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'recentcreate/fetch',
+      type: 'assign/fetch',
     });
   }
 
@@ -120,17 +124,6 @@ BasicListState
     });
   };
 
-
-
-  //联系人表单联动
-  handleCustomerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { current } = this.state;
-    const content = !current && e.target.value && e.target.value.length <= 3 ? e.target.value : '';
-    this.props.form.setFieldsValue({
-      contacter: content,
-    });
-  };
-
   handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const { dispatch, form } = this.props;
@@ -144,7 +137,7 @@ BasicListState
         done: true,
       });
       dispatch({
-        type: 'recentcreate/submit',
+        type: 'assign/submit',
         payload: { id, ...fieldsValue },
       });
     });
@@ -152,25 +145,25 @@ BasicListState
 
   render() {
     const {
-      recentcreate: { list },
+      assign: { list },
       loading,
     } = this.props;
     const {
-      form: { getFieldDecorator, getFieldValue, },
+      form: { getFieldDecorator, },
     } = this.props;
 
     const { visible, done, current = {} } = this.state;
 
-    // const editAndDelete = (key: string, currentItem: BasicListItemDataType) => {
-    //   if (key === 'edit') this.showEditModal(currentItem);
-    // };
+    const editAndDelete = (key: string, currentItem: BasicListItemDataType) => {
+      if (key === 'edit') this.showEditModal(currentItem);
+    };
 
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
     const ListContent = ({
-      data: { prepayments, original_account, type, contacter, phone, receipt },
+      data: { type, created_at, status, contacter, phone },
     }: {
       data: BasicListItemDataType;
     }) => (
@@ -184,39 +177,35 @@ BasicListState
             <p>{phone ? phone : '无'}</p>
           </div>
           <div className={styles.listContentItem}>
-            <span>预付款</span>
-            <p>{prepayments ? prepayments : 0}</p>
-          </div>
-          <div className={styles.listContentItem}>
-            <span>收据编号</span>
-            <p>{receipt ? receipt : '-'}</p>
-          </div>
-          <div className={styles.listContentItem}>
             <span>安装类型</span>
             <p>{type}</p>
           </div>
           <div className={styles.listContentItem}>
-            <span>原户号</span>
-            <p>{original_account ? original_account : '-'}</p>
+            <span>开单日期</span>
+            <p>{moment(created_at).format('YYYY-MM-DD')}</p>
+          </div>
+          <div className={styles.listContentItem}>
+            <Progress percent={status ? status * 10 : 0} status={status ? status > 10 ? 'success' : 'active' : 'exception'} strokeWidth={6} style={{ width: 180 }} />
           </div>
         </div>
       );
 
-    // const MoreBtn: React.FC<{
-    //   item: BasicListItemDataType;
-    // }> = ({ item }) => (
-    //   <Dropdown
-    //     overlay={
-    //       <Menu onClick={({ key }) => editAndDelete(key, item)}>
-    //         <Menu.Item key="delete">退款</Menu.Item>
-    //       </Menu>
-    //     }
-    //   >
-    //     <a>
-    //       更多 <Icon type="down" />
-    //     </a>
-    //   </Dropdown>
-    // );
+    const MoreBtn: React.FC<{
+      item: BasicListItemDataType;
+    }> = ({ item }) => (
+      <Dropdown
+        overlay={
+          <Menu onClick={({ key }) => editAndDelete(key, item)}>
+            <Menu.Item disabled={item.status <= 4} key="edit">编辑</Menu.Item>
+            <Menu.Item key="delete">删除</Menu.Item>
+          </Menu>
+        }
+      >
+        <a>
+          更多 <Icon type="down" />
+        </a>
+      </Dropdown>
+    );
 
     const getModalContent = () => {
       if (done) {
@@ -235,66 +224,35 @@ BasicListState
         );
       }
       return (
-        <Form onSubmit={this.handleSubmit}>
-          <FormItem label="客户名称" {...this.formLayout}>
-            {getFieldDecorator('customer', {
-              rules: [{ required: true, message: '请输入客户名称' }],
-              initialValue: current.customer,
-            })(<Input onChange={this.handleCustomerChange} placeholder="请输入" />)}
-          </FormItem>
-          <FormItem label="联系人" {...this.formLayout}>
-            {getFieldDecorator('contacter', {
-              rules: [{ required: false, message: '请输入联系人' }],
-              initialValue: current.contacter,
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem label="手机" {...this.formLayout}>
-            {getFieldDecorator('phone', {
-              rules: [{ required: true, pattern: new RegExp(/^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$/, "g"), message: '请输入手机号码' }],
-              initialValue: current.phone,
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem label="安装地址" {...this.formLayout}>
-            {getFieldDecorator('address', {
-              rules: [{ required: true, message: '请输入安装地址' }],
-              initialValue: current.address,
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem label="预付款" {...this.formLayout}>
-            {getFieldDecorator('prepayments', {
-              rules: [{ required: false, message: '请输入预付款' }],
-              initialValue: current.prepayments,
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem label="收据编号" {...this.formLayout} style={{
-            display: getFieldValue('prepayments') > 0 ? 'block' : 'none',
-          }} >
-            {getFieldDecorator('receipt', {
-              rules: [{ required: true, message: '请输入收据编号' }],
-              initialValue: '000000',
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem label="安装类型" {...this.formLayout}>
-            {getFieldDecorator('type', {
-              rules: [{ required: true, message: '请选择安装类型' }],
-              initialValue: current.type,
+        <Form onSubmit={this.handleSubmit} style={{margin: '0 16px 0'}}>
+          <Descriptions column={1} className={styles.Descriptions}>
+            <Descriptions.Item label={'客户名称'}>{current.customer}</Descriptions.Item>
+            <Descriptions.Item label={'联系人'}>{current.contacter}</Descriptions.Item>
+            <Descriptions.Item label={'手机'} >{current.phone}</Descriptions.Item>
+            <Descriptions.Item label={'安装类型'}>{current.type}</Descriptions.Item>
+            <Descriptions.Item label={'安装地址'}>{current.address}</Descriptions.Item>
+          </Descriptions>
+          <Divider dashed style={{margin: '10px 0 10px 0'}} />
+          <FormItem label={"工程名称"} {...this.formLayout}>
+            {getFieldDecorator('projectname',{
+              rules: [{ required:true, message:'请输入工程名称'}],
+              initialValue: current.customer + '给水安装工程',
             })(
-              <Select placeholder="请选择">
-                <SelectOption value="新装">新装</SelectOption>
-                <SelectOption value="迁移">迁移</SelectOption>
-                <SelectOption value="老户新增">老户新增</SelectOption>
-                <SelectOption value="改管">改管</SelectOption>
-                <SelectOption value="抄表到户">抄表到户</SelectOption>
-              </Select>,
+              <Input />
             )}
           </FormItem>
-          <FormItem label="原户号" {...this.formLayout} style={{
-            display: getFieldValue('type') == '老户新增' || getFieldValue('type') == '迁移' ? 'block' : 'none',
-          }} >
-            {getFieldDecorator('original_account', {
-              rules: [{ required: true, message: '请输入原户号' }],
-              initialValue: '',
-            })(<Input placeholder="请输入原户号" />)}
+          <FormItem label="施工队伍" {...this.formLayout}>
+            {getFieldDecorator('construction_team', {
+              rules: [{ required: true, message: '请选择安装类型' }],
+              initialValue: current.construction_team,
+            })(
+              <Select placeholder="请选择">
+                <SelectOption value="张永红">张永红</SelectOption>
+                <SelectOption value="李天成">李天成</SelectOption>
+                <SelectOption value="李宗进">李宗进</SelectOption>
+                <SelectOption value="钱燕">钱燕</SelectOption>
+              </Select>,
+            )}
           </FormItem>
           <FormItem {...this.formLayout} label="备注">
             {getFieldDecorator('remark', {
@@ -341,21 +299,9 @@ BasicListState
           <Card
             className={styles.listCard}
             bordered={false}
-            title="新开工单"
+            title="等待派工"
             style={{ marginTop: 24 }}
             bodyStyle={{ padding: '0 32px 40px 32px' }}
-            extra={
-              <Button
-                type="primary"
-                style={{ width: '100%', marginBottom: 8 }}
-                icon="plus"
-                onClick={this.showModal}
-                ref={component => {
-                  // eslint-disable-next-line  react/no-find-dom-node
-                  this.addBtn = findDOMNode(component) as HTMLButtonElement;
-                }}
-              >新建工单</Button>
-            }
           >
             <Card className={styles.Card} bordered={false}>
               <List
@@ -374,9 +320,9 @@ BasicListState
                           this.showEditModal(item);
                         }}
                       >
-                        编辑
+                        派工
                       </Button>,
-                      // <MoreBtn key="more" item={item} />,
+                      <MoreBtn key="more" item={item} />,
                     ]}
                   >
                     <List.Item.Meta
@@ -395,7 +341,7 @@ BasicListState
         </div>
 
         <Modal
-          title={done ? null : `${current.id ? '编辑' : '添加'}工单`}
+          title={'派工'}
           className={styles.standardListForm}
           width={640}
           bodyStyle={done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
@@ -420,4 +366,4 @@ BasicListState
   }
 }
 
-export default Form.create<BasicListProps>()(Recentcreate);
+export default Form.create<BasicListProps>()(Assign);
