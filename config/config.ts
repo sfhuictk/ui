@@ -195,14 +195,9 @@ export default {
                       component: './mywork/engineering/waitassign',
                     },
                     {
-                      name: 'projects',
-                      path: '/mywork/engineering/projects',
-                      component: './mywork/engineering/projects',
-                    },
-                    {
-                      name: 'applications',
-                      path: '/mywork/engineering/applications',
-                      component: './mywork/engineering/applications',
+                      name: 'report',
+                      path: '/mywork/engineering/report',
+                      component: './mywork/engineering/report',
                     },
                   ],
                 },

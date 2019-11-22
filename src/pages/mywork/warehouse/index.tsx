@@ -78,9 +78,6 @@ class Warehouse extends Component<SearchProps> {
       case 'check':
         router.push(`${url}/check`);
         break;
-      case 'projects':
-        router.push(`${url}/projects`);
-        break;
       default:
         break;
     }
@@ -107,12 +104,8 @@ class Warehouse extends Component<SearchProps> {
         tab: '待领料的工单',
       },
       {
-        key: 'projects',
-        tab: '项目',
-      },
-      {
-        key: 'applications',
-        tab: '应用',
+        key: 'check',
+        tab: '待核对的工单',
       },
     ];
 

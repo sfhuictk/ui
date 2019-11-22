@@ -3,12 +3,15 @@ import {
   Button,
   Card,
   // Col,
+  Dropdown,
   Descriptions,
   Divider,
   Drawer,
   Form,
+  Icon,
   Input,
   List,
+  Menu,
   Modal,
   Progress,
   // Row,
@@ -30,7 +33,7 @@ const SelectOption = Select.Option;
 const { TextArea } = Input;
 
 interface BasicListProps extends FormComponentProps {
-  check: StateType;
+  report: StateType;
   dispatch: Dispatch<any>;
   loading: boolean;
   currentUser: CurrentUser;
@@ -46,20 +49,20 @@ interface BasicListState {
 
 @connect(
   ({
-    check,
+    report,
     loading,
   }: {
-    check: StateType;
+    report: StateType;
     loading: {
       models: { [key: string]: boolean };
     };
   }) => ({
-    check,
-    loading: loading.models.check,
+    report,
+    loading: loading.models.report,
   }),
 )
 
-class Check extends Component<
+class report extends Component<
 BasicListProps,
 BasicListState
 > {
@@ -75,7 +78,7 @@ BasicListState
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'check/fetch',
+      type: 'report/fetch',
     });
   }
 
@@ -134,29 +137,15 @@ BasicListState
         done: true,
       });
       dispatch({
-        type: 'check/submit',
+        type: 'report/submit',
         payload: { id, ...fieldsValue },
       });
     });
   };
 
-  handleMark = (item: BasicListItemDataType) => {
-    this.setState({
-      current: item,
-    });
-    const { dispatch } = this.props;
-    const id = item.id;
-
-    dispatch({
-      type: 'check/submit',
-      payload: { id },
-    });
-  };
-
-
   render() {
     const {
-      check: { list },
+      report: { list },
       loading,
     } = this.props;
     const {
@@ -165,6 +154,9 @@ BasicListState
 
     const { visible, done, current = {} } = this.state;
 
+    const editAndDelete = (key: string, currentItem: BasicListItemDataType) => {
+      if (key === 'edit') this.showEditModal(currentItem);
+    };
 
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
@@ -197,6 +189,23 @@ BasicListState
           </div>
         </div>
       );
+
+    const MoreBtn: React.FC<{
+      item: BasicListItemDataType;
+    }> = ({ item }) => (
+      <Dropdown
+        overlay={
+          <Menu onClick={({ key }) => editAndDelete(key, item)}>
+            <Menu.Item disabled={item.status <= 4} key="edit">编辑</Menu.Item>
+            <Menu.Item key="delete">删除</Menu.Item>
+          </Menu>
+        }
+      >
+        <a>
+          更多 <Icon type="down" />
+        </a>
+      </Dropdown>
+    );
 
     const getModalContent = () => {
       if (done) {
@@ -308,11 +317,12 @@ BasicListState
                         key="edit"
                         onClick={e => {
                           e.preventDefault();
-                          this.handleMark(item);
+                          this.showEditModal(item);
                         }}
                       >
-                        核对
+                        派工
                       </Button>,
+                      <MoreBtn key="more" item={item} />,
                     ]}
                   >
                     <List.Item.Meta
@@ -356,4 +366,4 @@ BasicListState
   }
 }
 
-export default Form.create<BasicListProps>()(Check);
+export default Form.create<BasicListProps>()(report);

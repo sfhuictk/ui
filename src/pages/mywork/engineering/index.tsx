@@ -75,8 +75,8 @@ class Search extends Component<SearchProps> {
       case 'waitassign':
         router.push(`${url}/waitassign`);
         break;
-      case 'applications':
-        router.push(`${url}/applications`);
+      case 'report':
+        router.push(`${url}/report`);
         break;
       case 'projects':
         router.push(`${url}/projects`);
@@ -107,8 +107,8 @@ class Search extends Component<SearchProps> {
         tab: '待派工',
       },
       {
-        key: 'projects',
-        tab: '项目',
+        key: 'report',
+        tab: '待报工',
       },
       {
         key: 'applications',
