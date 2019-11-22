@@ -75,8 +75,8 @@ class Warehouse extends Component<SearchProps> {
       case 'neworder':
         router.push(`${url}/neworder`);
         break;
-      case 'applications':
-        router.push(`${url}/applications`);
+      case 'check':
+        router.push(`${url}/check`);
         break;
       case 'projects':
         router.push(`${url}/projects`);

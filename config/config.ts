@@ -220,11 +220,11 @@ export default {
                       path: '/mywork/warehouse/neworder',
                       component: './mywork/warehouse/neworder',
                     },
-                    // {
-                    //   name: 'projects',
-                    //   path: '/mywork/warehouse/projects',
-                    //   component: './mywork/warehouse/projects',
-                    // },
+                    {
+                      name: 'check',
+                      path: '/mywork/warehouse/check',
+                      component: './mywork/warehouse/check',
+                    },
                     // {
                     //   name: 'applications',
                     //   path: '/mywork/warehouse/applications',
