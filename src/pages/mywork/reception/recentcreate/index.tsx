@@ -293,7 +293,7 @@ BasicListState
           }} >
             {getFieldDecorator('original_account', {
               rules: [{ required: true, message: '请输入原户号' }],
-              initialValue: '',
+              initialValue: '-',
             })(<Input placeholder="请输入原户号" />)}
           </FormItem>
           <FormItem {...this.formLayout} label="备注">

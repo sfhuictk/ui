@@ -1,6 +1,6 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { addFakeList, queryserverFakeList, removeFakeList, updateFakeList, queryserverSearch } from './service';
+import { addFakeList, queryserverFakeList, updateFakeList } from './service';
 
 import { BasicListItemDataType, Paginate } from './data';
 
@@ -19,8 +19,6 @@ export interface ModelType {
   state: StateType;
   effects: {
     fetch: Effect;
-    search: Effect;
-    appendFetch: Effect;
     submit: Effect;
   };
   reducers: {
@@ -42,31 +40,13 @@ const Model: ModelType = {
         type: 'save',
         payload: {
           list: response ? response['data'] : [],
-          meta: response ? response['meta'] : [],
         }
-      });
-    },
-    *search({ payload }, { call, put }) {
-      const response = yield call(queryserverSearch, payload);
-      yield put({
-        type: 'save',
-        payload: {
-          list: response ? response['data'] : [],
-          meta: response ? response['meta'] : [],
-        }
-      });
-    },
-    *appendFetch({ payload }, { call, put }) {
-      const response = yield call(queryserverFakeList, payload);
-      yield put({
-        type: 'appendList',
-        payload: Array.isArray(response['data']) ? response['data'] : [],
       });
     },
     *submit({ payload }, { call, put }) {
       let callback;
       if (payload.id) {
-        callback = Object.keys(payload).length === 1 ? removeFakeList : updateFakeList;
+        callback = updateFakeList;
       } else {
         callback = addFakeList;
       }

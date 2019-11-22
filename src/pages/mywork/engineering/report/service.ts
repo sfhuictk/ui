@@ -7,8 +7,11 @@ interface ParamsType extends Partial<BasicListItemDataType> {
 }
 
 export async function queryserverFakeList(params: ParamsType) {
-  return request('/server/api/dispatch/waitassign',{
-    params,
+  return request('/server/api/dispatch/todolist',{
+    method: 'POST',
+    data: {
+      "process": 5,
+    },
   });
 }
 
