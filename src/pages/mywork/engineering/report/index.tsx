@@ -260,7 +260,9 @@ BasicListState
               initialValue: current.remark,
             })(<TextArea rows={4} placeholder="请输入至少五个字符" />)}
           </FormItem>
-          <TableForm />
+          {getFieldDecorator('meters', {
+            initialValue: [],
+          })(<TableForm />)}
         </Form>
       );
     };
@@ -321,7 +323,7 @@ BasicListState
                           this.showEditModal(item);
                         }}
                       >
-                        派工
+                        报工审核
                       </Button>,
                       <MoreBtn key="more" item={item} />,
                     ]}

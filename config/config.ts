@@ -229,28 +229,28 @@ export default {
                 },
               ]
             },
-            // {
-            //   path: '/form',
-            //   icon: 'form',
-            //   name: 'form',
-            //   routes: [
-            //     {
-            //       name: 'basic-form',
-            //       path: '/form/basic-form',
-            //       component: './form/basic-form',
-            //     },
-            //     {
-            //       name: 'step-form',
-            //       path: '/form/step-form',
-            //       component: './form/step-form',
-            //     },
-            //     {
-            //       name: 'advanced-form',
-            //       path: '/form/advanced-form',
-            //       component: './form/advanced-form',
-            //     },
-            //   ],
-            // },
+            {
+              path: '/form',
+              icon: 'form',
+              name: 'form',
+              routes: [
+                // {
+                //   name: 'basic-form',
+                //   path: '/form/basic-form',
+                //   component: './form/basic-form',
+                // },
+                // {
+                //   name: 'step-form',
+                //   path: '/form/step-form',
+                //   component: './form/step-form',
+                // },
+                {
+                  name: 'advanced-form',
+                  path: '/form/advanced-form',
+                  component: './form/advanced-form',
+                },
+              ],
+            },
             // {
             //   path: '/list',
             //   icon: 'table',
