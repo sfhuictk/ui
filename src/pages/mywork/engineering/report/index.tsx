@@ -14,7 +14,6 @@ import {
   Menu,
   Modal,
   Progress,
-  // Row,
   Select,
   Result,
 } from 'antd';
@@ -26,6 +25,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import { StateType } from './model';
 import { BasicListItemDataType, CurrentUser } from './data';
+import TableForm from './components/TableForm';
 import styles from './style.less';
 
 const FormItem = Form.Item;
@@ -224,18 +224,18 @@ BasicListState
         );
       }
       return (
-        <Form onSubmit={this.handleSubmit} style={{margin: '0 16px 0'}}>
-          <Descriptions column={1} className={styles.Descriptions}>
+        <Form onSubmit={this.handleSubmit} style={{ margin: '0 16px 0' }}>
+          <Descriptions column={3} className={styles.Descriptions}>
             <Descriptions.Item label={'客户名称'}>{current.customer}</Descriptions.Item>
             <Descriptions.Item label={'联系人'}>{current.contacter}</Descriptions.Item>
             <Descriptions.Item label={'手机'} >{current.phone}</Descriptions.Item>
             <Descriptions.Item label={'安装类型'}>{current.type}</Descriptions.Item>
             <Descriptions.Item label={'安装地址'}>{current.address}</Descriptions.Item>
           </Descriptions>
-          <Divider dashed style={{margin: '10px 0 10px 0'}} />
+          <Divider dashed style={{ margin: '10px 0 10px 0' }} />
           <FormItem label={"工程名称"} {...this.formLayout}>
-            {getFieldDecorator('projectname',{
-              rules: [{ required:true, message:'请输入工程名称'}],
+            {getFieldDecorator('projectname', {
+              rules: [{ required: true, message: '请输入工程名称' }],
               initialValue: current.customer + '给水安装工程',
             })(
               <Input />
@@ -260,6 +260,7 @@ BasicListState
               initialValue: current.remark,
             })(<TextArea rows={4} placeholder="请输入至少五个字符" />)}
           </FormItem>
+          <TableForm />
         </Form>
       );
     };
@@ -299,7 +300,7 @@ BasicListState
           <Card
             className={styles.listCard}
             bordered={false}
-            title="等待派工"
+            title="报工"
             style={{ marginTop: 24 }}
             bodyStyle={{ padding: '0 32px 40px 32px' }}
           >
@@ -336,14 +337,13 @@ BasicListState
                 )}
               />
             </Card>
-
           </Card>
-        </div>
+        </div >
 
         <Modal
           title={'派工'}
           className={styles.standardListForm}
-          width={640}
+          width={840}
           bodyStyle={done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
           destroyOnClose
           visible={visible}

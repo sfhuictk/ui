@@ -290,7 +290,7 @@ BasicListState
           <Card
             className={styles.listCard}
             bordered={false}
-            title="等待派工"
+            title="待领料的工单"
             style={{ marginTop: 24 }}
             bodyStyle={{ padding: '0 32px 40px 32px' }}
           >

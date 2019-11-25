@@ -341,13 +341,13 @@ BasicListState
           <Card
             className={styles.listCard}
             bordered={false}
-            title="新开工单"
+            title="最近开单"
             style={{ marginTop: 24 }}
             bodyStyle={{ padding: '0 32px 40px 32px' }}
             extra={
               <Button
                 type="primary"
-                style={{ width: '100%', marginBottom: 8 }}
+                style={{ width: '100%'}}
                 icon="plus"
                 onClick={this.showModal}
                 ref={component => {
