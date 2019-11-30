@@ -6,9 +6,9 @@ import styles from '../style.less';
 
 interface TableFormDateType {
   key: string;
-  workId?: string;
-  name?: string;
-  department?: string;
+  customer?: string;
+  contacter?: string;
+  phone?: string;
   isNew?: boolean;
   editable?: boolean;
 }
@@ -42,9 +42,9 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
 
   columns = [
     {
-      title: '成员姓名',
-      dataIndex: 'name',
-      key: 'name',
+      title: '联系人',
+      dataIndex: 'contacter',
+      key: 'contacter',
       width: '20%',
       render: (text: string, record: TableFormDateType) => {
         if (record.editable) {
@@ -52,9 +52,9 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
             <Input
               value={text}
               autoFocus
-              onChange={e => this.handleFieldChange(e, 'name', record.key)}
+              onChange={e => this.handleFieldChange(e, 'contacter', record.key)}
               onKeyPress={e => this.handleKeyPress(e, record.key)}
-              placeholder="成员姓名"
+              placeholder="联系人"
             />
           );
         }
@@ -62,18 +62,18 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
       },
     },
     {
-      title: '工号',
-      dataIndex: 'workId',
-      key: 'workId',
+      title: '客户名称',
+      dataIndex: 'customer',
+      key: 'customer',
       width: '20%',
       render: (text: string, record: TableFormDateType) => {
         if (record.editable) {
           return (
             <Input
               value={text}
-              onChange={e => this.handleFieldChange(e, 'workId', record.key)}
+              onChange={e => this.handleFieldChange(e, 'customer', record.key)}
               onKeyPress={e => this.handleKeyPress(e, record.key)}
-              placeholder="工号"
+              placeholder="客户名称"
             />
           );
         }
@@ -81,18 +81,18 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
       },
     },
     {
-      title: '所属部门',
-      dataIndex: 'department',
-      key: 'department',
+      title: '联系电话',
+      dataIndex: 'phone',
+      key: 'phone',
       width: '40%',
       render: (text: string, record: TableFormDateType) => {
         if (record.editable) {
           return (
             <Input
               value={text}
-              onChange={e => this.handleFieldChange(e, 'department', record.key)}
+              onChange={e => this.handleFieldChange(e, 'phone', record.key)}
               onKeyPress={e => this.handleKeyPress(e, record.key)}
-              placeholder="所属部门"
+              placeholder="联系电话"
             />
           );
         }
@@ -174,9 +174,9 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
     const newData = data.map(item => ({ ...item }));
     newData.push({
       key: `NEW_TEMP_ID_${this.index}`,
-      workId: '',
-      name: '',
-      department: '',
+      customer: '',
+      contacter: '',
+      phone: '',
       editable: true,
       isNew: true,
     });
@@ -221,8 +221,8 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
         return;
       }
       const target = this.getRowByKey(key) || {};
-      if (!target.workId || !target.name || !target.department) {
-        message.error('请填写完整成员信息。');
+      if (!target.customer || !target.contacter || !target.phone) {
+        message.error('请填写完整水表信息。');
         (e.target as HTMLInputElement).focus();
         this.setState({
           loading: false,

@@ -5,6 +5,8 @@ export default {
   'menu.login': '登录',
   'menu.register': '注册',
   'menu.register.result': '注册结果',
+  'menu.admin': '管理员',
+  'menu.admin.user': '员工管理',
   'menu.dashboard': '仪表板',
   'menu.dashboard.analysis': '分析页',
   'menu.dashboard.monitor': '监控页',

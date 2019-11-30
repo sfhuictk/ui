@@ -126,7 +126,8 @@ class Login extends Component<
                 formatMessage({ id: 'user-login.login.message-invalid-credentials' }),
               )}
             <UserName
-              name="userName"
+              // name="userName"
+              name="email"
               placeholder={`${formatMessage({ id: 'user-login.login.userName' })}: admin or user`}
               rules={[
                 {
@@ -136,6 +137,7 @@ class Login extends Component<
               ]}
             />
             <Password
+              // name="password"
               name="password"
               placeholder={`${formatMessage({ id: 'user-login.login.password' })}: ant.design`}
               rules={[
