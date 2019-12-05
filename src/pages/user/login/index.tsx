@@ -3,18 +3,20 @@ import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
 
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { Dispatch } from 'redux';
+import { Dispatch, AnyAction } from 'redux';
 import { FormComponentProps } from 'antd/es/form';
 import Link from 'umi/link';
 import { connect } from 'dva';
-import { StateType } from './model';
+import { StateType } from '@/models/login';
 import LoginComponents from './components/Login';
 import styles from './style.less';
+import { LoginParamsType } from '@/services/login';
+import { ConnectState } from '@/models/connect';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginComponents;
 
 interface LoginProps {
-  dispatch: Dispatch<any>;
+  dispatch: Dispatch<AnyAction>;
   userLogin: StateType;
   submitting: boolean;
 }
@@ -22,33 +24,12 @@ interface LoginState {
   type: string;
   autoLogin: boolean;
 }
-export interface FormDataType {
-  userName: string;
-  password: string;
-  mobile: string;
-  captcha: string;
-}
 
-@connect(
-  ({
-    userLogin,
-    loading,
-  }: {
-    userLogin: StateType;
-    loading: {
-      effects: {
-        [key: string]: string;
-      };
-    };
-  }) => ({
-    userLogin,
-    submitting: loading.effects['userLogin/login'],
-  }),
-)
-class Login extends Component<
-  LoginProps,
-  LoginState
-> {
+@connect(({ login, loading }: ConnectState) => ({
+  userLogin: login,
+  submitting: loading.effects['login/login'],
+}))
+class Login extends Component<LoginProps, LoginState> {
   loginForm: FormComponentProps['form'] | undefined | null = undefined;
 
   state: LoginState = {
@@ -62,12 +43,12 @@ class Login extends Component<
     });
   };
 
-  handleSubmit = (err: any, values: FormDataType) => {
+  handleSubmit = (err: unknown, values: LoginParamsType) => {
     const { type } = this.state;
     if (!err) {
       const { dispatch } = this.props;
       dispatch({
-        type: 'userLogin/login',
+        type: 'login/login',
         payload: {
           ...values,
           type,
@@ -81,23 +62,30 @@ class Login extends Component<
   };
 
   onGetCaptcha = () =>
-    new Promise((resolve, reject) => {
+    new Promise<boolean>((resolve, reject) => {
       if (!this.loginForm) {
         return;
       }
-      this.loginForm.validateFields(['mobile'], {}, (err: any, values: FormDataType) => {
-        if (err) {
-          reject(err);
-        } else {
-          const { dispatch } = this.props;
-          ((dispatch({
-            type: 'userLogin/getCaptcha',
-            payload: values.mobile,
-          }) as unknown) as Promise<any>)
-            .then(resolve)
-            .catch(reject);
-        }
-      });
+      this.loginForm.validateFields(
+        ['mobile'],
+        {},
+        async (err: unknown, values: LoginParamsType) => {
+          if (err) {
+            reject(err);
+          } else {
+            const { dispatch } = this.props;
+            try {
+              const success = await ((dispatch({
+                type: 'login/getCaptcha',
+                payload: values.mobile,
+              }) as unknown) as Promise<unknown>);
+              resolve(!!success);
+            } catch (error) {
+              reject(error);
+            }
+          }
+        },
+      );
     });
 
   renderMessage = (content: string) => (
@@ -114,7 +102,7 @@ class Login extends Component<
           defaultActiveKey={type}
           onTabChange={this.onTabChange}
           onSubmit={this.handleSubmit}
-          ref={(form: any) => {
+          onCreate={(form?: FormComponentProps['form']) => {
             this.loginForm = form;
           }}
         >
@@ -126,8 +114,7 @@ class Login extends Component<
                 formatMessage({ id: 'user-login.login.message-invalid-credentials' }),
               )}
             <UserName
-              // name="userName"
-              name="email"
+              name="userName"
               placeholder={`${formatMessage({ id: 'user-login.login.userName' })}: admin or user`}
               rules={[
                 {
@@ -137,7 +124,6 @@ class Login extends Component<
               ]}
             />
             <Password
-              // name="password"
               name="password"
               placeholder={`${formatMessage({ id: 'user-login.login.password' })}: ant.design`}
               rules={[
@@ -148,7 +134,9 @@ class Login extends Component<
               ]}
               onPressEnter={e => {
                 e.preventDefault();
-                this.loginForm.validateFields(this.handleSubmit);
+                if (this.loginForm) {
+                  this.loginForm.validateFields(this.handleSubmit);
+                }
               }}
             />
           </Tab>

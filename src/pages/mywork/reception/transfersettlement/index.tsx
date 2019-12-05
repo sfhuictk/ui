@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Dispatch } from 'redux';
 import { FormComponentProps } from 'antd/es/form';
 import { connect } from 'dva';
-import numeral from 'numeral';
+// import numeral from 'numeral';
 import { StateType } from './model';
 import { ListItemDataType } from './data.d';
 import StandardFormRow from './components/StandardFormRow';
@@ -65,21 +65,7 @@ class Applications extends Component<ApplicationsProps> {
     } = this.props;
     const { getFieldDecorator } = form;
 
-    const CardInfo: React.FC<{
-      activeUser: React.ReactNode;
-      newUser: React.ReactNode;
-    }> = ({ activeUser, newUser }) => (
-      <div className={styles.cardInfo}>
-        <div>
-          <p>活跃用户</p>
-          <p>{activeUser}</p>
-        </div>
-        <div>
-          <p>新增用户</p>
-          <p>{newUser}</p>
-        </div>
-      </div>
-    );
+    
 
     const formItemLayout = {
       wrapperCol: {
@@ -185,10 +171,6 @@ class Applications extends Component<ApplicationsProps> {
               >
                 <Card.Meta avatar={<Avatar size="small" src={item.avatar} />} title={item.title} />
                 <div className={styles.cardItemContent}>
-                  <CardInfo
-                    activeUser={formatWan(item.activeUser)}
-                    newUser={numeral(item.newUser).format('0,0')}
-                  />
                 </div>
               </Card>
             </List.Item>

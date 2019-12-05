@@ -1,4 +1,4 @@
-import { MenuTheme } from 'antd/es/menu';
+import { MenuTheme } from 'antd/es/menu/MenuContext';
 
 export type ContentWidth = 'Fluid' | 'Fixed';
 
@@ -44,7 +44,8 @@ export interface DefaultSettings {
 
 export default {
   navTheme: 'dark',
-  primaryColor: '#1890FF',
+  // 拂晓蓝
+  primaryColor: 'daybreak',
   layout: 'sidemenu',
   contentWidth: 'Fluid',
   fixedHeader: false,

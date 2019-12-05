@@ -17,10 +17,11 @@ export interface HeaderSearchProps {
   dataSource: DataSourceItemType[];
   defaultOpen: boolean;
   open?: boolean;
+  defaultValue?: string;
 }
 
 interface HeaderSearchState {
-  value: string;
+  value?: string;
   searchMode: boolean;
 }
 
@@ -52,14 +53,13 @@ export default class HeaderSearch extends Component<HeaderSearchProps, HeaderSea
     super(props);
     this.state = {
       searchMode: props.defaultOpen,
-      value: '',
+      value: props.defaultValue,
     };
     this.debouncePressEnter = debounce(this.debouncePressEnter, 500, {
       leading: true,
       trailing: false,
     });
   }
-
 
   onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -94,18 +94,17 @@ export default class HeaderSearch extends Component<HeaderSearchProps, HeaderSea
   leaveSearchMode = () => {
     this.setState({
       searchMode: false,
-      value: '',
     });
   };
 
   debouncePressEnter = () => {
     const { onPressEnter } = this.props;
     const { value } = this.state;
-    onPressEnter(value);
+    onPressEnter(value || '');
   };
 
   render() {
-    const { className, placeholder, open, ...restProps } = this.props;
+    const { className, defaultValue, placeholder, open, ...restProps } = this.props;
     const { searchMode, value } = this.state;
     delete restProps.defaultOpen; // for rc-select not affected
     const inputClass = classNames(styles.input, {
@@ -135,6 +134,7 @@ export default class HeaderSearch extends Component<HeaderSearchProps, HeaderSea
             ref={node => {
               this.inputRef = node;
             }}
+            defaultValue={defaultValue}
             aria-label={placeholder}
             placeholder={placeholder}
             onKeyDown={this.onKeyDown}

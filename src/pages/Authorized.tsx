@@ -1,4 +1,5 @@
 import React from 'react';
+import NoAuth from './403';
 import Redirect from 'umi/redirect';
 import { connect } from 'dva';
 import pathToRegexp from 'path-to-regexp';
@@ -12,6 +13,9 @@ interface AuthComponentProps extends ConnectProps {
 const getRouteAuthority = (path: string, routeData: Route[]) => {
   let authorities: string[] | string | undefined;
   routeData.forEach(route => {
+    if (route.authority) {
+      authorities = route.authority;
+    }
     // match prefix
     if (pathToRegexp(`${route.path}(.*)`).test(path)) {
       // exact match
@@ -43,7 +47,7 @@ const AuthComponent: React.FC<AuthComponentProps> = ({
   return (
     <Authorized
       authority={getRouteAuthority(location.pathname, routes) || ''}
-      noMatch={isLogin ? <Redirect to="/exception/403" /> : <Redirect to="/user/login" />}
+      noMatch={isLogin ? <NoAuth /> : <Redirect to="/user/login" />}
     >
       {children}
     </Authorized>

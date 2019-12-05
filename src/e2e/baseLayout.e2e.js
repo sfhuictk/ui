@@ -1,5 +1,5 @@
-const RouterConfig = require('../../config/config').default.routes;
 const { uniq } = require('lodash');
+const RouterConfig = require('../../config/config').default.routes;
 
 const BASE_URL = `http://localhost:${process.env.PORT || 8000}`;
 
@@ -19,6 +19,13 @@ function formatter(routes, parentPath = '') {
   return uniq(result.filter(item => !!item));
 }
 
+beforeAll(async () => {
+  await page.goto(`${BASE_URL}`);
+  await page.evaluate(() => {
+    localStorage.setItem('antd-pro-authority', '["admin"]');
+  });
+});
+
 describe('Ant Design Pro E2E test', () => {
   const testPage = path => async () => {
     await page.goto(`${BASE_URL}${path}`);
@@ -32,7 +39,6 @@ describe('Ant Design Pro E2E test', () => {
   };
 
   const routers = formatter(RouterConfig);
-  console.log('routers', routers);
   routers.forEach(route => {
     it(`test pages ${route}`, testPage(route));
   });
