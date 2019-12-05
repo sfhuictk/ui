@@ -66,6 +66,8 @@ const Model: LoginModelType = {
     },
     *logout(_, { put }) {
       const { redirect } = getPageQuery();
+      sessionStorage.removeItem('api_token');
+      sessionStorage.removeItem('authority');
       // redirect
       if (window.location.pathname !== '/user/login' && !redirect) {
         yield put(
@@ -82,6 +84,7 @@ const Model: LoginModelType = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
+      sessionStorage.setItem('api_token', payload.api_token);
       setAuthority(payload.currentAuthority);
       return {
         ...state,

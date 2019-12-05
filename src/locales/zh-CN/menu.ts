@@ -10,7 +10,7 @@ export default {
   'menu.dashboard.analysis': '分析页',
   'menu.dashboard.monitor': '监控页',
   'menu.dashboard.workplace': '工作台',
-  'menu.dashboard.basic-list': '工单查询',
+  'menu.search': '工单查询',
   'menu.mywork': '工作台',
   'menu.mywork.reception': '前台',
   'menu.mywork.reception.recentcreate': '最近开单',

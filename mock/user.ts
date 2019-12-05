@@ -78,20 +78,22 @@ export default {
     },
   ],
   'POST /api/login/account': (req: Request, res: Response) => {
-    const { password, userName, type } = req.body;
-    if (password === 'ant.design' && userName === 'admin') {
+    const { password, email, type } = req.body;
+    if (password === 'ant.design' && email === 'admin@admin.com') {
       res.send({
         status: 'ok',
         type,
         currentAuthority: 'admin',
+        api_token: '123456789'
       });
       return;
     }
-    if (password === 'ant.design' && userName === 'user') {
+    if (password === 'ant.design' && email === 'user@user.com') {
       res.send({
         status: 'ok',
         type,
         currentAuthority: 'user',
+        api_token: '987654321'
       });
       return;
     }
