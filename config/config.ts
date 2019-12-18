@@ -119,25 +119,6 @@ export default {
               component: './dashboard/analysis',
             },
             {
-              path: '/account',
-              name: 'account',
-              icon: 'user',
-              routes: [
-                {
-                  path: '/account/center',
-                  name: 'center',
-                  icon: 'user',
-                  component: './account/center',
-                },
-                {
-                  path: '/account/settings',
-                  name: 'settings',
-                  icon: 'user',
-                  component: './account/settings',
-                },
-              ]
-            },
-            {
               path: '/test',
               name: 'test',
               component: './list/card-list',

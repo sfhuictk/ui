@@ -73,6 +73,14 @@ BasicListState
     // });
   }
 
+  componentWillUnmount() {
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'listBasicList/clear',
+    });
+  }
+  
+
   showModal = () => {
     this.setState({
       visible: true,
@@ -164,11 +172,11 @@ BasicListState
       loading,
     } = this.props;
 
-    const { current = {} } = this.state;
+    const { current = {},searchkey } = this.state;
 
     const extraContent = (
       <div className={styles.extraContent} >
-        <Search className={styles.extraContentSearch} placeholder="#单号 / 姓名 / 地址 / 联系人 / @电话" onChange={this.handleSearch} />
+        <Search value={searchkey} className={styles.extraContentSearch} placeholder="#单号 / 姓名 / 地址 / 联系人 / @电话" onChange={this.handleSearch} />
       </div>
     );
 
