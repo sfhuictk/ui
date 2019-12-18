@@ -67,12 +67,6 @@ const Model: LoginModelType = {
       const payload = { api_token: localStorage.getItem('api_token') };
       const response = payload.api_token ? yield call(fakeApiLogin, payload) : {status: 'error'};
       // Login successfully
-      if (response.status) {
-        yield put({
-          type: 'changeLoginStatus',
-          payload: response,
-        });
-      }
       yield put({
         type: 'changeLoginStatus',
         payload: response,

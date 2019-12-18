@@ -155,12 +155,12 @@ class BasicList extends Component<BasicListProps, BasicListState> {
       ? { footer: null, onCancel: this.handleDone }
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
-    const paginationProps = {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      pageSize: 5,
-      total: 50,
-    };
+    // const paginationProps = {
+    //   showSizeChanger: true,
+    //   showQuickJumper: true,
+    //   pageSize: 5,
+    //   total: 50,
+    // };
 
     const ListContent = ({
       data: { phone, created_at, department },

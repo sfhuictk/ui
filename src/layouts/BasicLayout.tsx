@@ -58,7 +58,7 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
 
 const defaultFooterDom = (
   <DefaultFooter
-    copyright="2019 Lvlei 普洱市达洱盛工程有限公司"
+    copyright="2019 吕磊 保留所有权利"
     links={[
       {
         key: 'Ant Design Pro',

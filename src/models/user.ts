@@ -8,6 +8,7 @@ export interface CurrentUser {
   name?: string;
   title?: string;
   group?: string;
+  department?: string;
   signature?: string;
   tags?: {
     key: string;

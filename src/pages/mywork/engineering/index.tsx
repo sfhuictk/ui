@@ -41,9 +41,6 @@ const PageHeaderContent: React.FC<{ currentUser: CurrentUser }> = ( {currentUser
           {currentUser.name}
           ，祝你开心每一天！
         </div>
-        <div>
-          {currentUser.title} |{currentUser.group}
-        </div>
       </div>
     </div>
   );
@@ -56,10 +53,6 @@ const PageHeaderContent: React.FC<{ currentUser: CurrentUser }> = ( {currentUser
 )
 class Search extends Component<SearchProps> {
   componentDidMount() {
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'engineering/fetchUserCurrent',
-    // });
   }
 
   handleTabChange = (key: string) => {
@@ -71,9 +64,6 @@ class Search extends Component<SearchProps> {
         break;
       case 'report':
         router.push(`${url}/report`);
-        break;
-      case 'projects':
-        router.push(`${url}/projects`);
         break;
       default:
         break;
@@ -99,10 +89,6 @@ class Search extends Component<SearchProps> {
       {
         key: 'report',
         tab: '待报工',
-      },
-      {
-        key: 'applications',
-        tab: '应用',
       },
     ];
 

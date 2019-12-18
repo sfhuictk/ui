@@ -93,7 +93,7 @@ class Login extends Component<LoginProps, LoginState> {
   
   openNotification = () => {
     notification.info({
-      message: '请与管理员联系重置密码！',
+      message: '请联系管理员重置密码！',
     });
   };
 
