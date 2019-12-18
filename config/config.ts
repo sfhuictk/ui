@@ -31,11 +31,11 @@ const plugins: IPlugin[] = [
       // },
       pwa: pwa
         ? {
-            workboxPluginMode: 'InjectManifest',
-            workboxOptions: {
-              importWorkboxFrom: 'local',
-            },
-          }
+          workboxPluginMode: 'InjectManifest',
+          workboxOptions: {
+            importWorkboxFrom: 'local',
+          },
+        }
         : false, // default close dll, because issue https://github.com/ant-design/ant-design-pro/issues/4665
       // dll features https://webpack.js.org/plugins/dll-plugin/
       // dll: {
@@ -102,7 +102,7 @@ export default {
               path: '/search',
               name: 'search',
               icon: 'search',
-              component: './dashboard/basic-list',
+              component: './dashboard/search',
               authority: ['admin', 'user'],
             },
             {
@@ -117,7 +117,25 @@ export default {
               name: 'analysis',
               icon: 'dashboard',
               component: './dashboard/analysis',
-              authority: ['admin'],
+            },
+            {
+              path: '/account',
+              name: 'account',
+              icon: 'user',
+              routes: [
+                {
+                  path: '/account/center',
+                  name: 'center',
+                  icon: 'user',
+                  component: './account/center',
+                },
+                {
+                  path: '/account/settings',
+                  name: 'settings',
+                  icon: 'user',
+                  component: './account/settings',
+                },
+              ]
             },
             {
               path: '/test',
