@@ -43,7 +43,10 @@ const Model: LoginModelType = {
       });
       // Login successfully
       if (response.status === 'ok') {
-        localStorage.setItem('api_token', response.api_token);
+        if( payload.autoLogin ){
+          localStorage.setItem('api_token', response.api_token);
+        }
+        sessionStorage.setItem('api_token', response.api_token);
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -64,7 +67,7 @@ const Model: LoginModelType = {
     },
 
     *apilogin(_, { call, put }) {
-      const payload = { api_token: localStorage.getItem('api_token') };
+      const payload = { api_token: localStorage.getItem('api_token') ? localStorage.getItem('api_token') : sessionStorage.getItem('api_token') };
       const response = payload.api_token ? yield call(fakeApiLogin, payload) : {status: 'error'};
       // Login successfully
       yield put({
@@ -80,6 +83,7 @@ const Model: LoginModelType = {
     *logout(_, { put }) {
       const { redirect } = getPageQuery();
       localStorage.removeItem('api_token');
+      sessionStorage.removeItem('api_token');
       sessionStorage.removeItem('authority');
       // redirect
       if (window.location.pathname !== '/user/login' && !redirect) {

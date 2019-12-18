@@ -51,7 +51,7 @@ const UserModel: UserModelType = {
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const payload = yield {api_token: localStorage.getItem('api_token')};
+      const payload = yield {api_token: localStorage.getItem('api_token') ? localStorage.getItem('api_token') : sessionStorage.getItem('api_token')};
       const response = yield call(queryCurrent,payload);
       yield put({
         type: 'saveCurrentUser',
