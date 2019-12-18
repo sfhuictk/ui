@@ -7,7 +7,7 @@ interface ParamsType extends Partial<User> {
 }
 
 export async function queryserverFakeList(params: ParamsType) {
-  return request('/server/api/getuser',{
+  return request('/server/api/users',{
     params,
   });
 }

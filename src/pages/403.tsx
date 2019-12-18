@@ -1,4 +1,4 @@
-import { Button, Result } from 'antd';
+import { Button, Result, Divider } from 'antd';
 import React from 'react';
 import router from 'umi/router';
 
@@ -9,11 +9,18 @@ const NoAuth: React.FC<{}> = () => (
   <Result
     status="403"
     title="403"
-    subTitle="Sorry, you don't have access to this page."
+    subTitle="对不起, 你没有访问该页面的权限."
     extra={
-      <Button type="primary" onClick={() => router.push('/')}>
-        Back Home
+      <div>
+        <Button type="default" onClick={() => router.push('/')}>
+        回首页
+      </Button>      
+      <Divider type="vertical" />
+      <Button type="primary" onClick={() => router.push('/user/login')}>
+        去登录
       </Button>
+      </div>
+      
     }
   ></Result>
 );

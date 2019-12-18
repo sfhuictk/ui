@@ -40,7 +40,7 @@ const Model: ModelType = {
   effects: {
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryserverFakeList, payload);
-      console.log(response);
+      // console.log(response);
       yield put({
         type: 'queryList',
         payload: response ? response : [],

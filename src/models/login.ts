@@ -3,7 +3,7 @@ import { routerRedux } from 'dva/router';
 import { Effect } from 'dva';
 import { stringify } from 'querystring';
 
-import { fakeAccountLogin, getFakeCaptcha } from '@/services/login';
+import { fakeAccountLogin, fakeApiLogin, getFakeCaptcha } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 
@@ -18,6 +18,7 @@ export interface LoginModelType {
   state: StateType;
   effects: {
     login: Effect;
+    apilogin: Effect;
     getCaptcha: Effect;
     logout: Effect;
   };
@@ -42,6 +43,7 @@ const Model: LoginModelType = {
       });
       // Login successfully
       if (response.status === 'ok') {
+        localStorage.setItem('api_token', response.api_token);
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -61,12 +63,29 @@ const Model: LoginModelType = {
       }
     },
 
+    *apilogin(_, { call, put }) {
+      const payload = { api_token: localStorage.getItem('api_token') };
+      const response = payload.api_token ? yield call(fakeApiLogin, payload) : {status: 'error'};
+      // Login successfully
+      if (response.status) {
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response,
+        });
+      }
+      yield put({
+        type: 'changeLoginStatus',
+        payload: response,
+      });
+    },
+
     *getCaptcha({ payload }, { call }) {
       yield call(getFakeCaptcha, payload);
     },
+
     *logout(_, { put }) {
       const { redirect } = getPageQuery();
-      sessionStorage.removeItem('api_token');
+      localStorage.removeItem('api_token');
       sessionStorage.removeItem('authority');
       // redirect
       if (window.location.pathname !== '/user/login' && !redirect) {
@@ -84,7 +103,6 @@ const Model: LoginModelType = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      sessionStorage.setItem('api_token', payload.api_token);
       setAuthority(payload.currentAuthority);
       return {
         ...state,

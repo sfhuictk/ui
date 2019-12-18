@@ -116,6 +116,12 @@ export default {
               authority: ['admin'],
             },
             {
+              path: '/test',
+              name: 'test',
+              component: './list/card-list',
+              authority: ['test',]
+            },
+            {
               path: 'mywork',
               name: 'mywork',
               icon: 'edit',

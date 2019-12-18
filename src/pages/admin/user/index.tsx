@@ -163,7 +163,7 @@ class BasicList extends Component<BasicListProps, BasicListState> {
     };
 
     const ListContent = ({
-      data: { phone, created_at, currentAuthority },
+      data: { phone, created_at, department },
     }: {
       data: User;
     }) => (
@@ -174,7 +174,7 @@ class BasicList extends Component<BasicListProps, BasicListState> {
         </div>
         <div className={styles.listContentItem}>
           <span>权限</span>
-          <p>{currentAuthority}</p>
+          <p>{department}</p>
         </div>
         <div className={styles.listContentItem}>
           <span>创建时间</span>
@@ -237,9 +237,9 @@ class BasicList extends Component<BasicListProps, BasicListState> {
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="权限" {...this.formLayout}>
-            {getFieldDecorator('currentAuthority', {
+            {getFieldDecorator('department', {
               rules: [{ required: true, message: '请配置权限' }],
-              initialValue: current.currentAuthority,
+              initialValue: current.department,
             })(
               <Select placeholder="请选择">
                 <SelectOption value="管理员">管理员</SelectOption>
@@ -277,7 +277,7 @@ class BasicList extends Component<BasicListProps, BasicListState> {
                 size="large"
                 rowKey="id"
                 loading={loading}
-                pagination={paginationProps}
+                // pagination={paginationProps}
                 dataSource={user}
                 renderItem={item => (
                   <List.Item
@@ -295,7 +295,7 @@ class BasicList extends Component<BasicListProps, BasicListState> {
                     ]}
                   >
                     <List.Item.Meta
-                      avatar={<Avatar shape="square" size="large" />}
+                      avatar={<Avatar src={item.avatar} shape="square" size="large" />}
                       title={<a>{item.name}</a>}
                       description={item.email}
                     />
@@ -308,7 +308,7 @@ class BasicList extends Component<BasicListProps, BasicListState> {
         </PageHeaderWrapper>
 
         <Modal
-          title={done ? null : `任务${current ? '编辑' : '添加'}`}
+          title={done ? null : `人员${current ? '编辑' : '添加'}`}
           className={styles.standardListForm}
           width={640}
           bodyStyle={done ? { padding: '72px 0' } : { padding: '28px 0 0' }}

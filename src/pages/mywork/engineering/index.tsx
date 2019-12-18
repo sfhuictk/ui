@@ -9,8 +9,8 @@ import { Dispatch } from 'redux';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import router from 'umi/router';
-import { CurrentUser } from './data.d';
-import { ModalState } from './model';
+import { CurrentUser } from '@/models/user';
+import { ConnectState } from '@/models/connect';
 
 interface SearchProps {
   dispatch: Dispatch<any>;
@@ -24,7 +24,8 @@ interface SearchProps {
   };
 }
 
-const PageHeaderContent: React.FC<{ currentUser: CurrentUser }> = ({ currentUser }) => {
+
+const PageHeaderContent: React.FC<{ currentUser: CurrentUser }> = ( {currentUser} ) => {
   const loading = currentUser && Object.keys(currentUser).length;
   if (!loading) {
     return <Skeleton avatar paragraph={{ rows: 1 }} active />;
@@ -49,23 +50,16 @@ const PageHeaderContent: React.FC<{ currentUser: CurrentUser }> = ({ currentUser
 };
 
 @connect(
-  ({
-    engineering: { currentUser },
-    loading,
-  }: {
-    engineering: ModalState;
-    loading: { effects: any };
-  }) => ({
-    currentUser,
-    currentUserLoading: loading.effects['engineering/fetchUserCurrent'],
+  ({user}: ConnectState) => ({
+    currentUser: user.currentUser,
   }),
 )
 class Search extends Component<SearchProps> {
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'engineering/fetchUserCurrent',
-    });
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'engineering/fetchUserCurrent',
+    // });
   }
 
   handleTabChange = (key: string) => {
@@ -84,10 +78,6 @@ class Search extends Component<SearchProps> {
       default:
         break;
     }
-  };
-
-  handleFormSubmit = (value: string) => {
-    console.log(value);
   };
 
   getTabKey = () => {
@@ -116,7 +106,7 @@ class Search extends Component<SearchProps> {
       },
     ];
 
-    const { children,currentUser } = this.props;
+    const { children, currentUser } = this.props;
 
     return (
       <PageHeaderWrapper

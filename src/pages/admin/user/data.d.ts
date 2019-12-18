@@ -5,6 +5,7 @@ export interface User {
   email: string;
   group: string;
   currentAuthority: string;
+  department: string;
   remember_token: string;
   phone: string;
   created_at: Date;
