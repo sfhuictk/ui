@@ -120,6 +120,7 @@ class Login extends Component<LoginProps, LoginState> {
                 formatMessage({ id: 'user-login.login.message-invalid-credentials' }),
               )}
             <UserName
+              
               name="email"
               placeholder={`${formatMessage({ id: 'user-login.login.email' })}`}
               rules={[

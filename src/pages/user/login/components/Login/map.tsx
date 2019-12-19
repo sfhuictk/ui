@@ -7,7 +7,7 @@ export default {
     props: {
       size: 'large',
       id: 'userName',
-      prefix: <Icon type="user" className={styles.prefixIcon} />,
+      prefix: <Icon type="mail" className={styles.prefixIcon} />,
       placeholder: 'admin',
     },
     rules: [
