@@ -6,11 +6,11 @@ import {
   Form,
   Icon,
   Input,
-  List,
   Menu,
   Modal,
   Select,
   Result,
+  Table,
 } from 'antd';
 import React, { Component } from 'react';
 
@@ -19,14 +19,12 @@ import { FormComponentProps } from 'antd/es/form';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import { findDOMNode } from 'react-dom';
-import moment from 'moment';
 import { StateType } from './model';
 import { User } from './data.d';
 import styles from './style.less';
 
 const FormItem = Form.Item;
 const SelectOption = Select.Option;
-
 interface BasicListProps extends FormComponentProps {
   userList: StateType;
   dispatch: Dispatch<any>;
@@ -161,27 +159,52 @@ class BasicList extends Component<BasicListProps, BasicListState> {
     //   pageSize: 5,
     //   total: 50,
     // };
-
-    const ListContent = ({
-      data: { phone, created_at, department },
-    }: {
-      data: User;
-    }) => (
-      <div className={styles.listContent}>
-        <div className={styles.listContentItem}>
-          <span>电话</span>
-          <p>{phone}</p>
-        </div>
-        <div className={styles.listContentItem}>
-          <span>权限</span>
-          <p>{department}</p>
-        </div>
-        <div className={styles.listContentItem}>
-          <span>创建时间</span>
-          <p>{moment(created_at).format('YYYY-MM-DD HH:mm')}</p>
-        </div>
-      </div>
-    );
+   
+    const columns = [
+      {
+        dataIndex: 'avatar',
+        key: 'avatar',
+        render: (avatar: string) => (<Avatar src={avatar} shape="square" size="default" />)
+      },
+      {
+        title: '用户名',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: '邮箱',
+        dataIndex: 'email',
+        key: 'email',
+      },
+      {
+        title: '电话',
+        dataIndex: 'phone',
+        key: 'phone',
+      },
+      {
+        title: '权限',
+        dataIndex: 'department',
+        key: 'department',
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'created_at',
+        key: 'created_at',
+      },
+      {
+        title: '操作',
+        key: 'action',
+        render: (item: User) => (
+          <a
+            key="action"
+            onClick={e => {
+              e.preventDefault();
+              this.showEditModal(item);
+            }}
+          >编辑</a>
+        ),
+      },
+    ];
 
     const MoreBtn: React.FC<{
       item: User;
@@ -253,16 +276,15 @@ class BasicList extends Component<BasicListProps, BasicListState> {
     return (
       <>
         <PageHeaderWrapper>
-          <div className={styles.standardList}>
+          <div className={styles.standardList}>            
             <Card
               className={styles.listCard}
               bordered={false}
               title="用户列表"
               style={{ marginTop: 24 }}
               bodyStyle={{ padding: '0 32px 40px 32px' }}
-            >
-              <Button
-                type="dashed"
+              extra={<Button
+                type="primary"
                 style={{ width: '100%', marginBottom: 8 }}
                 icon="plus"
                 onClick={this.showModal}
@@ -271,38 +293,12 @@ class BasicList extends Component<BasicListProps, BasicListState> {
                   this.addBtn = findDOMNode(component) as HTMLButtonElement;
                 }}
               >
-                添加
-              </Button>
-              <List
-                size="large"
-                rowKey="id"
-                loading={loading}
-                // pagination={paginationProps}
-                dataSource={user}
-                renderItem={item => (
-                  <List.Item
-                    actions={[
-                      <a
-                        key="edit"
-                        onClick={e => {
-                          e.preventDefault();
-                          this.showEditModal(item);
-                        }}
-                      >
-                        编辑
-                      </a>,
-                      <MoreBtn key="more" item={item} />,
-                    ]}
-                  >
-                    <List.Item.Meta
-                      avatar={<Avatar src={item.avatar} shape="square" size="large" />}
-                      title={<a>{item.name}</a>}
-                      description={item.email}
-                    />
-                    <ListContent data={item} />
-                  </List.Item>
-                )}
-              />
+                添加用户
+              </Button>}
+              >
+
+              <Table dataSource={user} columns={columns} pagination={false} loading={loading} />
+              
             </Card>
           </div>
         </PageHeaderWrapper>
