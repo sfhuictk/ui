@@ -24,8 +24,9 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     this.setState({
       isReady: true,
     });
-    const { dispatch } = this.props;    
-    if (dispatch) {
+    const { dispatch } = this.props; 
+    const hasApiToken = localStorage.getItem('api_token') || sessionStorage.getItem('api_token');   
+    if (dispatch && hasApiToken) {
       dispatch({
         type: 'login/apilogin',
       });
@@ -37,8 +38,6 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     const { children, loading, login } = this.props;
     // You can replace it to your authentication rule (such as check token exists)
     // 你可以把它替换成你自己的登录认证规则（比如判断 token 是否存在）    
-    // const token = sessionStorage.getItem('api_token');
-    // const isLogin = currentUser && currentUser.userid;
     const isLogin = login && login.status == 'ok';
     // console.log(isLogin);
     const queryString = stringify({

@@ -26,7 +26,7 @@ interface LoginState {
 
 @connect(({ login, loading }: ConnectState) => ({
   userLogin: login,
-  submitting: loading.effects['login/login'],
+  submitting: loading.models.login,
 }))
 class Login extends Component<LoginProps, LoginState> {
   loginForm: FormComponentProps['form'] | undefined | null = undefined;
@@ -102,6 +102,7 @@ class Login extends Component<LoginProps, LoginState> {
     const { userLogin, submitting } = this.props;
     const { status, type: loginType } = userLogin;
     const { type, autoLogin } = this.state;
+    console.log(status === 'error');
     return (
       <div className={styles.main}>
         <LoginComponents
