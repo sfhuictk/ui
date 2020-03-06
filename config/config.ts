@@ -112,10 +112,6 @@ export default {
               component: './workplace',
             },
             {
-              path: '/video',
-              redirect: 'http://183.224.178.98:8000',
-            },
-            {
               path: '/admin',
               name: 'admin',
               icon: 'lock',

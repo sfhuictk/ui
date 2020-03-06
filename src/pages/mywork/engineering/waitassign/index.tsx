@@ -38,6 +38,7 @@ interface BasicListProps extends FormComponentProps {
   loading: boolean;
   currentUser: CurrentUser;
 }
+
 interface BasicListState {
   visible: boolean;
   drawervisible: boolean;
