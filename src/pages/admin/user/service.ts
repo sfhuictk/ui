@@ -26,23 +26,22 @@ export async function queryFakeList(params: ParamsType) {
   });
 }
 
-export async function removeFakeList(params: ParamsType) {
-  const { page = 5, ...restParams } = params;
-  return request('/api/fake_list', {
+export async function resetPassword(params: ParamsType) {
+  const { page = 5, ...restParams } = params;  
+  const api_token = sessionStorage.getItem('api_token');
+  return request('server/api/user/resetpwd', {
     method: 'POST',
-    params: {
-      page,
-    },
     data: {
       ...restParams,
-      method: 'delete',
+      api_token,
+      method: 'update',
     },
   });
 }
 
 export async function addFakeList(params: ParamsType) {
   const { page = 5, ...restParams } = params;
-  return request('/server/api/dispatchcreate', {
+  return request('/server/api/user/create', {
     method: 'POST',
     data: {
       ...restParams,
@@ -52,7 +51,7 @@ export async function addFakeList(params: ParamsType) {
 
 export async function updateFakeList(params: ParamsType) {
   const { page = 5, ...restParams } = params;
-  return request('/server/api/dispatchupdate', {
+  return request('/server/api/user/update', {
     method: 'POST',
     data: {
       ...restParams,

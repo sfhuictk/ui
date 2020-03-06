@@ -1,6 +1,6 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { addFakeList, queryserverFakeList, removeFakeList, updateFakeList, queryserverSearch } from './service';
+import { addFakeList, queryserverFakeList, resetPassword, updateFakeList, queryserverSearch } from './service';
 
 import { User, Paginate } from './data.d';
 
@@ -63,7 +63,7 @@ const Model: ModelType = {
     *submit({ payload }, { call, put }) {
       let callback;
       if (payload.id) {
-        callback = Object.keys(payload).length === 1 ? removeFakeList : updateFakeList;
+        callback = Object.keys(payload).length === 1 ? resetPassword : updateFakeList;
       } else {
         callback = addFakeList;
       }

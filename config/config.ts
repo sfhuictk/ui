@@ -31,11 +31,11 @@ const plugins: IPlugin[] = [
       // },
       pwa: pwa
         ? {
-          workboxPluginMode: 'InjectManifest',
-          workboxOptions: {
-            importWorkboxFrom: 'local',
-          },
-        }
+            workboxPluginMode: 'InjectManifest',
+            workboxOptions: {
+              importWorkboxFrom: 'local',
+            },
+          }
         : false, // default close dll, because issue https://github.com/ant-design/ant-design-pro/issues/4665
       // dll features https://webpack.js.org/plugins/dll-plugin/
       // dll: {
@@ -92,7 +92,7 @@ export default {
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          authority: ['admin', 'user'],
+          authority: ['管理员', '工程部','前台','仓库'],
           routes: [
             {
               path: '/',
@@ -103,14 +103,24 @@ export default {
               name: 'search',
               icon: 'search',
               component: './dashboard/search',
-              authority: ['admin', 'user'],
+              authority: ['管理员', '工程部','前台','仓库'],
+            },
+            {
+              path: '/workplace',
+              name: 'workplace',
+              icon: 'workplace',
+              component: './workplace',
+            },
+            {
+              path: '/video',
+              redirect: 'http://183.224.178.98:8000',
             },
             {
               path: '/admin',
               name: 'admin',
               icon: 'lock',
               component: './admin/user',
-              authority: ['admin'],
+              authority: ['管理员'],
             },
             {
               path: '/dashboard',
@@ -119,23 +129,17 @@ export default {
               component: './dashboard/analysis',
             },
             {
-              path: '/test',
-              name: 'test',
-              component: './list/card-list',
-              authority: ['test'],
-            },
-            {
               path: 'mywork',
               name: 'mywork',
               icon: 'edit',
               Routes: ['src/pages/Authorized'],
-              authority: ['admin'],
+              authority: ['管理员'],
               routes: [
                 {
                   name: 'reception',
                   path: '/mywork/reception',
                   component: './mywork/reception',
-                  authority: ['admin'],
+                  authority: ['管理员'],
                   routes: [
                     {
                       path: '/mywork/reception',
@@ -145,7 +149,7 @@ export default {
                       name: 'recentcreate',
                       path: '/mywork/reception/recentcreate',
                       component: './mywork/reception/recentcreate',
-                      authority: ['admin'],
+                      authority: ['管理员'],
                     },
                     {
                       name: 'transfersettlement',

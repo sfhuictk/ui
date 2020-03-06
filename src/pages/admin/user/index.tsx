@@ -2,11 +2,12 @@ import {
   Avatar,
   Button,
   Card,
-  Dropdown,
+  Divider,
+  // Dropdown,
   Form,
-  Icon,
+  // Icon,
   Input,
-  Menu,
+  // Menu,
   Modal,
   Select,
   Result,
@@ -138,10 +139,10 @@ class BasicList extends Component<BasicListProps, BasicListState> {
 
     const editAndDelete = (key: string, currentItem: User) => {
       if (key === 'edit') this.showEditModal(currentItem);
-      else if (key === 'delete') {
+      else if (key === 'reset') {
         Modal.confirm({
-          title: '删除任务',
-          content: '确定删除该任务吗？',
+          title: '重置密码',
+          content: "确定重置该用户的密码？",
           okText: '确认',
           cancelText: '取消',
           onOk: () => this.deleteItem(currentItem.id),
@@ -159,7 +160,7 @@ class BasicList extends Component<BasicListProps, BasicListState> {
     //   pageSize: 5,
     //   total: 50,
     // };
-   
+
     const columns = [
       {
         dataIndex: 'avatar',
@@ -195,33 +196,40 @@ class BasicList extends Component<BasicListProps, BasicListState> {
         title: '操作',
         key: 'action',
         render: (item: User) => (
-          <a
-            key="action"
-            onClick={e => {
-              e.preventDefault();
-              this.showEditModal(item);
-            }}
-          >编辑</a>
+          <div>
+            <a
+              key="action"
+              onClick={e => {
+                e.preventDefault();
+                this.showEditModal(item);
+              }}
+            >编辑</a>
+            <Divider type={"vertical"} />
+            <a
+              key="reset"
+              onClick={() => editAndDelete("reset", item)}
+            >重置密码</a>
+          </div>
         ),
       },
     ];
 
-    const MoreBtn: React.FC<{
-      item: User;
-    }> = ({ item }) => (
-      <Dropdown
-        overlay={
-          <Menu onClick={({ key }) => editAndDelete(key, item)}>
-            <Menu.Item key="edit">编辑</Menu.Item>
-            <Menu.Item key="delete">删除</Menu.Item>
-          </Menu>
-        }
-      >
-        <a>
-          更多 <Icon type="down" />
-        </a>
-      </Dropdown>
-    );
+    // const MoreBtn: React.FC<{
+    //   item: User;
+    // }> = ({ item }) => (
+    //   <Dropdown
+    //     overlay={
+    //       <Menu onClick={({ key }) => editAndDelete(key, item)}>
+    //         <Menu.Item key="edit">编辑</Menu.Item>
+    //         <Menu.Item key="delete">删除</Menu.Item>
+    //       </Menu>
+    //     }
+    //   >
+    //     <a>
+    //       更多 <Icon type="down" />
+    //     </a>
+    //   </Dropdown>
+    // );
 
     const getModalContent = () => {
       if (done) {
@@ -266,7 +274,13 @@ class BasicList extends Component<BasicListProps, BasicListState> {
             })(
               <Select placeholder="请选择">
                 <SelectOption value="管理员">管理员</SelectOption>
-                <SelectOption value="员工">员工</SelectOption>
+                <SelectOption value="前台">前台</SelectOption>
+                <SelectOption value="仓库">仓库</SelectOption>
+                <SelectOption value="工程部">工程部</SelectOption>
+                <SelectOption value="抄表中心">抄表中心</SelectOption>
+                <SelectOption value="预结算室">预结算室</SelectOption>
+                <SelectOption value="办公室">办公室</SelectOption>
+                <SelectOption value="普通员工">普通员工</SelectOption>
               </Select>,
             )}
           </FormItem>
@@ -276,7 +290,7 @@ class BasicList extends Component<BasicListProps, BasicListState> {
     return (
       <>
         <PageHeaderWrapper>
-          <div className={styles.standardList}>            
+          <div className={styles.standardList}>
             <Card
               className={styles.listCard}
               bordered={false}
@@ -288,6 +302,7 @@ class BasicList extends Component<BasicListProps, BasicListState> {
                 style={{ width: '100%', marginBottom: 8 }}
                 icon="plus"
                 onClick={this.showModal}
+                loading={loading}
                 ref={component => {
                   // eslint-disable-next-line  react/no-find-dom-node
                   this.addBtn = findDOMNode(component) as HTMLButtonElement;
@@ -295,10 +310,10 @@ class BasicList extends Component<BasicListProps, BasicListState> {
               >
                 添加用户
               </Button>}
-              >
+            >
 
               <Table dataSource={user} columns={columns} pagination={false} loading={loading} />
-              
+
             </Card>
           </div>
         </PageHeaderWrapper>
